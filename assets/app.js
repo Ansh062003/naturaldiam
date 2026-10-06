@@ -20,6 +20,8 @@
   $('foot').innerHTML = 'Contact: <a href="mailto:' + C.contact + '">' + C.contact + '</a>';
   var types = []; S.forEach(function (s) { if (types.indexOf(s.type) < 0) types.push(s.type); });
   $('type').innerHTML = '<option value="">All stones</option>' + types.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
+  var origins = []; S.forEach(function (s) { if (s.origin && origins.indexOf(s.origin) < 0) origins.push(s.origin); }); origins.sort();
+  $('origin').innerHTML = '<option value="">All origins</option>' + origins.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
   var fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: C.currency || 'USD', maximumFractionDigits: 0 });
   function esc(x) { return String(x == null ? '' : x).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function embed(u, id) {
@@ -35,9 +37,10 @@
   }
   function total(s) { return s.pricePerCarat * s.carat; }
   function render() {
-    var q = $('q').value.toLowerCase(), t = $('type').value, z = $('size').value, h = $('heat').value, so = $('sort').value;
+    var q = $('q').value.toLowerCase(), t = $('type').value, og = $('origin').value, z = $('size').value, h = $('heat').value, so = $('sort').value;
     var r = S.filter(function (s) {
       if (t && s.type !== t) return false;
+      if (og && s.origin !== og) return false;
       if (h && s.heat !== h) return false;
       if (z) { var p = z.split('-'); if (s.carat < +p[0] || s.carat >= +p[1]) return false; }
       if (q && (s.id + ' ' + s.type + ' ' + s.shape + ' ' + (s.origin || '') + ' ' + (s.certificate||'')).toLowerCase().indexOf(q) < 0) return false;
@@ -54,8 +57,8 @@
         '<a class="ask" target="_blank" rel="noopener noreferrer" href="https://wa.me/393513976900?text=' + encodeURIComponent('Hello, I am interested in stone ' + s.id + ' (' + s.type + ', ' + s.carat.toFixed(2) + ' ct) on your website.') + '">Enquire on WhatsApp</a></div></article>';
     }).join('');
   }
-  ['q', 'type', 'size', 'heat', 'sort'].forEach(function (id) { $(id).addEventListener('input', render); });
-  $('reset').addEventListener('click', function () { ['q', 'type', 'size', 'heat', 'sort'].forEach(function (id) { $(id).value = ''; }); render(); });
+  ['q', 'type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).addEventListener('input', render); });
+  $('reset').addEventListener('click', function () { ['q', 'type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).value = ''; }); render(); });
   $('grid').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('.vid') : null; if (!b) return; var v = b.querySelector('video'); if (!v) return; if (v.paused) { v.controls = true; v.play(); b.classList.add('playing'); } else if (e.target === v) { v.pause(); } });
   render();
   }
