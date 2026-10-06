@@ -13,3 +13,6 @@ To add its video: put the mp4 in gems/assets/videos/ and a poster jpg in gems/as
 (Or put a YouTube / Vimeo / Google Drive link in a "Video" column of the sheet.)
 
 DNS (domain person): add ONLY website records. DO NOT change MX, TXT, SPF, DKIM or any email records.
+
+
+Prices: shown on the stone cards only if showPrices is true in gems/assets/stones.js (currently false = hidden). Change false to true to show prices and the price sort again.

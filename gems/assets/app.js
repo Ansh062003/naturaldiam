@@ -16,6 +16,7 @@
     document.documentElement.setAttribute('data-source', window.__src || 'baked');
     S=S.map(norm);
   var $ = function (id) { return document.getElementById(id); };
+  if (!C.showPrices) { var _so = document.getElementById('sort'); if (_so) Array.prototype.slice.call(_so.options).forEach(function (o) { if (o.value === 'pa' || o.value === 'pd') _so.removeChild(o); }); }
   $('name').textContent = C.name; $('tag').textContent = C.tagline;
   $('foot').innerHTML = C.footHtml || ('Contact: <a href="mailto:' + C.contact + '">' + C.contact + '</a>');
   var types = []; S.forEach(function (s) { if (types.indexOf(s.type) < 0) types.push(s.type); });
@@ -53,7 +54,7 @@
       return '<article class="card">' + embed(s.video, s.id) + '<div class="body"><h3>' + esc(s.type) + '<span>' + s.carat.toFixed(2) + ' ct</span></h3><p class="sid"><span>Stock no.</span> ' + esc(s.id) + (s.sample ? ' - sample' : '') + '</p><dl>' +
         '<dt>Treatment</dt><dd>' + esc(s.heat) + '</dd><dt>Shape</dt><dd>' + esc(s.shape) + '</dd><dt>Size</dt><dd>' + esc(s.dimensions) + '</dd>' +
         '<dt>Colour</dt><dd>' + esc(s.color||'-') + '</dd><dt>Origin</dt><dd>' + esc(s.origin||'-') + '</dd><dt>Certificate</dt><dd>' + esc(s.certificate||'-') + '</dd></dl>' +
-        '<p class="price"><span class="ppc">' + fmt.format(s.pricePerCarat) + ' <small>/ ct</small></span></p>' +
+        (C.showPrices ? '<p class="price"><span class="ppc">' + fmt.format(s.pricePerCarat) + ' <small>/ ct</small></span></p>' : '') +
         '<a class="ask" target="_blank" rel="noopener noreferrer" href="https://wa.me/393513976900?text=' + encodeURIComponent('Hello, I am interested in stone ' + s.id + ' (' + s.type + ', ' + s.carat.toFixed(2) + ' ct) on your website.') + '">Enquire on WhatsApp</a></div></article>';
     }).join('');
   }
