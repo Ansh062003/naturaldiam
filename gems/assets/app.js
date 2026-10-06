@@ -2,7 +2,7 @@
 
 (function () {
   var S = window.STONES || [], C = window.SITE || {};
-  var N = {stockno:'id',id:'id',stone:'type',type:'type',carat:'carat',weight:'carat',treatment:'heat',heat:'heat',shape:'shape',origin:'origin',certificate:'certificate',colour:'color',color:'color',dimensions:'dimensions',priceperct:'pricePerCarat',pricepercarat:'pricePerCarat',video:'video',status:'status',srno:'id',stonename:'type',certcolour:'color',certcolor:'color',sizelwxdmm:'dimensions',sizelxwxdmm:'dimensions',weightcts:'carat',size:'dimensions'};
+  var N = {stockno:'id',id:'id',stone:'type',type:'type',carat:'carat',weight:'carat',treatment:'heat',heat:'heat',shape:'shape',origin:'origin',certificate:'certificate',colour:'color',color:'color',dimensions:'dimensions',priceperct:'pricePerCarat',pricepercarat:'pricePerCarat',video:'video',status:'status',srno:'id',stonename:'type',certcolour:'color',certcolor:'color',sizelwxdmm:'dimensions',sizelxwxdmm:'dimensions',weightcts:'carat',size:'dimensions',stocknumero:'id',measurement:'dimensions',alct:'pricePerCarat'};
   function parseCSV(t){var rows=[],r=[],f='',q=false,i,c;for(i=0;i<t.length;i++){c=t[i];if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i++}else if(c=='"')q=false;else f+=c}else if(c=='"')q=true;else if(c==','){r.push(f);f=''}else if(c=='\n'){r.push(f);rows.push(r);r=[];f=''}else if(c!='\r')f+=c}if(f!==''||r.length){r.push(f);rows.push(r)}return rows}
   function fromCSV(t){var rows=parseCSV(t),h=rows.shift().map(function(x){return N[x.toLowerCase().replace(/[^a-z]/g,'')]||null});return rows.map(function(r){var o={};h.forEach(function(k,i){if(k)o[k]=(r[i]||'').trim()});o.id=/^[0-9]/.test(o.id)?'#'+o.id:o.id;o.carat=parseFloat(o.carat);o.pricePerCarat=parseFloat(String(o.pricePerCarat).replace(/[^0-9.]/g,''));var _p=o.pricePerCarat,_u=_p<500?25:50;o.pricePerCarat=Math.round(_p/_u)*_u;return o}).filter(function(o){return o.id&&o.carat>0&&o.pricePerCarat>0&&!/^(sold|hold|reserved)$/i.test(o.status||'')})}
   function cap(x){x=String(x||'').trim();return x?x.charAt(0).toUpperCase()+x.slice(1).toLowerCase():''}
@@ -53,6 +53,7 @@
       return '<article class="card">' + embed(s.video, s.id) + '<div class="body"><h3>' + esc(s.type) + '<span>' + s.carat.toFixed(2) + ' ct</span></h3><p class="sid"><span>Stock no.</span> ' + esc(s.id) + (s.sample ? ' - sample' : '') + '</p><dl>' +
         '<dt>Treatment</dt><dd>' + esc(s.heat) + '</dd><dt>Shape</dt><dd>' + esc(s.shape) + '</dd><dt>Size</dt><dd>' + esc(s.dimensions) + '</dd>' +
         '<dt>Colour</dt><dd>' + esc(s.color||'-') + '</dd><dt>Origin</dt><dd>' + esc(s.origin||'-') + '</dd><dt>Certificate</dt><dd>' + esc(s.certificate||'-') + '</dd></dl>' +
+        '<p class="price"><span class="ppc">' + fmt.format(s.pricePerCarat) + ' <small>/ ct</small></span></p>' +
         '<a class="ask" target="_blank" rel="noopener noreferrer" href="https://wa.me/393513976900?text=' + encodeURIComponent('Hello, I am interested in stone ' + s.id + ' (' + s.type + ', ' + s.carat.toFixed(2) + ' ct) on your website.') + '">Enquire on WhatsApp</a></div></article>';
     }).join('');
   }
