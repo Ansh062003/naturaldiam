@@ -163,6 +163,7 @@ function build(){
   li.addEventListener('click',function(e){e.stopPropagation();var b=e.target.closest('button');if(b){set(b.getAttribute('data-l'));var nav=b.closest('nav');if(nav)nav.classList.remove('open')}});
   uls[k].appendChild(li)}}
 function init(){build();var q=location.search.match(/[?&]lang=(\w\w)/),s=null;try{s=localStorage.getItem('nd_lang')}catch(e){}
- var l=q?q[1]:s;if(LANGS.indexOf(l)>0){set(l)}else{lang='en';apply()}}
+ var l=q?q[1]:s;if(!q&&!s){var n=navigator.languages||[navigator.language||''];for(var i=0;i<n.length;i++){var c=String(n[i]).slice(0,2).toLowerCase();if(c=='en')break;if(LANGS.indexOf(c)>0){lang=c;apply();return}}lang='en';apply();return}
+ if(LANGS.indexOf(l)>0){set(l)}else{lang='en';apply()}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
