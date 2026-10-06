@@ -50,7 +50,7 @@
     $('count').textContent = r.length + ' of ' + S.length + ' stones';
     $('empty').hidden = r.length > 0;
     $('grid').innerHTML = r.map(function (s) {
-      return '<article class="card">' + embed(s.video, s.id) + '<div class="body"><h3>' + esc(s.type) + '<span>' + s.carat.toFixed(2) + ' ct</span></h3><p class="sid">' + esc(s.id) + (s.sample ? ' - sample' : '') + '</p><dl>' +
+      return '<article class="card">' + embed(s.video, s.id) + '<div class="body"><h3>' + esc(s.type) + '<span>' + s.carat.toFixed(2) + ' ct</span></h3><p class="sid"><span>Stock no.</span> ' + esc(s.id) + (s.sample ? ' - sample' : '') + '</p><dl>' +
         '<dt>Treatment</dt><dd>' + esc(s.heat) + '</dd><dt>Shape</dt><dd>' + esc(s.shape) + '</dd><dt>Size</dt><dd>' + esc(s.dimensions) + '</dd>' +
         '<dt>Colour</dt><dd>' + esc(s.color||'-') + '</dd><dt>Origin</dt><dd>' + esc(s.origin||'-') + '</dd><dt>Certificate</dt><dd>' + esc(s.certificate||'-') + '</dd></dl>' +
         '<p class="price"><span class="ppc">' + fmt.format(s.pricePerCarat) + ' <small>/ ct</small></span></p>' +

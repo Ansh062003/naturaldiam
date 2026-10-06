@@ -86,6 +86,8 @@ var D={
 "Carat high to low":["Carati decrescenti","Carats décroissants","Quilates de mayor a menor","Karat absteigend"],
 "Reset":["Azzera","Réinitialiser","Restablecer","Zurücksetzen"],
 "No stones match these filters.":["Nessuna pietra corrisponde ai filtri.","Aucune pierre ne correspond à ces filtres.","Ninguna piedra coincide con estos filtros.","Keine Steine entsprechen diesen Filtern."],
+"Stock no.":["N. stock","N° de stock","N.º de stock","Lagernr."],
+"Video coming soon":["Video in arrivo","Vidéo bientôt disponible","Vídeo próximamente","Video folgt in Kürze"],
 "Stock no., stone, shape":["N. stock, pietra, forma","N° de stock, pierre, forme","N.º de stock, piedra, forma","Lagernr., Stein, Form"],
 "Treatment":["Trattamento","Traitement","Tratamiento","Behandlung"],
 "Shape":["Forma","Forme","Forma","Form"],
