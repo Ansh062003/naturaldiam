@@ -17,7 +17,7 @@
     S=S.map(norm);
   var $ = function (id) { return document.getElementById(id); };
   $('name').textContent = C.name; $('tag').textContent = C.tagline;
-  $('foot').innerHTML = 'Contact: <a href="mailto:' + C.contact + '">' + C.contact + '</a>';
+  $('foot').innerHTML = C.footHtml || ('Contact: <a href="mailto:' + C.contact + '">' + C.contact + '</a>');
   var types = []; S.forEach(function (s) { if (types.indexOf(s.type) < 0) types.push(s.type); });
   $('type').innerHTML = '<option value="">All stones</option>' + types.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
   var origins = []; S.forEach(function (s) { if (s.origin && origins.indexOf(s.origin) < 0) origins.push(s.origin); }); origins.sort();
