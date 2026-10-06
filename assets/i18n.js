@@ -8,30 +8,30 @@ var D={
 "Rubies & Sapphires":["Rubini e Zaffiri","Rubis et Saphirs","Rubíes y Zafiros","Rubine & Saphire"],
 "Contact":["Contatti","Contact","Contacto","Kontakt"],
 "Certified natural diamonds, rubies and sapphires, crafted and supplied from our offices in Milano, Mumbai and Bangkok":["Diamanti naturali, rubini e zaffiri certificati, lavorati e forniti dai nostri uffici di Milano, Mumbai e Bangkok","Diamants naturels, rubis et saphirs certifiés, façonnés et fournis depuis nos bureaux de Milano, Mumbai et Bangkok","Diamantes naturales, rubíes y zafiros certificados, elaborados y suministrados desde nuestras oficinas en Milano, Mumbai y Bangkok","Zertifizierte Naturdiamanten, Rubine und Saphire, gefertigt und geliefert aus unseren Büros in Milano, Mumbai und Bangkok"],
-"View the stones":["Vedi le pietre","Voir les pierres","Ver las piedras","Steine ansehen"],
+"View the stones":["Scopri le pietre","Voir les pierres","Ver las piedras","Steine ansehen"],
 "Get in touch":["Contattaci","Contactez-nous","Contáctenos","Kontakt aufnehmen"],
-"Certified fine gems and diamonds":["Gemme pregiate e diamanti certificati","Gemmes fines et diamants certifiés","Gemas finas y diamantes certificados","Zertifizierte feine Edelsteine und Diamanten"],
-"Origin & treatment disclosed":["Origine e trattamenti dichiarati","Origine et traitements communiqués","Origen y tratamientos declarados","Herkunft und Behandlung offengelegt"],
+"Certified fine gems and diamonds":["Gemme pregiate e diamanti certificati","Gemmes fines et diamants certifiés","Gemas finas y diamantes certificados","Zertifizierte Edelsteine und Diamanten"],
+"Origin & treatment disclosed":["Origine e trattamenti dichiarati","Origine et traitements communiqués","Origen y tratamientos declarados","Herkunft und Behandlung angegeben"],
 "Who we are":["Chi siamo","Qui sommes-nous","Quiénes somos","Über uns"],
 "Natural stones, honestly described.":["Pietre naturali, descritte con onestà.","Des pierres naturelles, décrites en toute honnêteté.","Piedras naturales, descritas con honestidad.","Natursteine, ehrlich beschrieben."],
 "Natural Diam Srl supplies natural loose diamonds and fine coloured gemstones to jewellers, dealers and collectors. Every stone is sold with a laboratory certificate, and we state the species, origin and treatment of each one plainly, so you know exactly what you are buying.":["Natural Diam Srl fornisce diamanti naturali sciolti e pregiate pietre colorate a gioiellieri, commercianti e collezionisti. Ogni pietra è venduta con certificato di laboratorio e indichiamo con chiarezza specie, origine e trattamento di ciascuna, così sai esattamente cosa stai acquistando.","Natural Diam Srl fournit des diamants naturels non montés et des pierres de couleur fines aux joailliers, négociants et collectionneurs. Chaque pierre est vendue avec un certificat de laboratoire, et nous indiquons clairement l'espèce, l'origine et le traitement de chacune, afin que vous sachiez exactement ce que vous achetez.","Natural Diam Srl suministra diamantes naturales sueltos y gemas de color finas a joyeros, comerciantes y coleccionistas. Cada piedra se vende con certificado de laboratorio, y indicamos con claridad la especie, el origen y el tratamiento de cada una, para que sepa exactamente lo que compra.","Natural Diam Srl liefert natürliche lose Diamanten und feine Farbedelsteine an Juweliere, Händler und Sammler. Jeder Stein wird mit einem Laborzertifikat verkauft, und wir geben Art, Herkunft und Behandlung jedes Steins klar an, damit Sie genau wissen, was Sie kaufen."],
 "What we offer":["Cosa offriamo","Ce que nous proposons","Qué ofrecemos","Unser Angebot"],
 "Natural Diamonds":["Diamanti naturali","Diamants naturels","Diamantes naturales","Naturdiamanten"],
 "Loose natural diamonds certified by GIA and IGI. Ask us for the current selection.":["Diamanti naturali sciolti certificati GIA e IGI. Chiedici la selezione attuale.","Diamants naturels non montés certifiés GIA et IGI. Demandez-nous la sélection actuelle.","Diamantes naturales sueltos certificados por GIA e IGI. Pídanos la selección actual.","Lose Naturdiamanten mit GIA- und IGI-Zertifikat. Fragen Sie nach der aktuellen Auswahl."],
-"Enquire":["Richiedi info","Se renseigner","Consultar","Anfragen"],
+"Enquire":["Richiedi info","Nous consulter","Consultar","Anfragen"],
 "Certified rubies and sapphires from 2 carats, with origin and treatment stated.":["Rubini e zaffiri certificati da 2 carati, con origine e trattamento dichiarati.","Rubis et saphirs certifiés à partir de 2 carats, avec origine et traitement indiqués.","Rubíes y zafiros certificados desde 2 quilates, con origen y tratamiento indicados.","Zertifizierte Rubine und Saphire ab 2 Karat, mit Angabe von Herkunft und Behandlung."],
 "Browse the stones":["Sfoglia le pietre","Parcourir les pierres","Ver las piedras","Steine ansehen"],
 "Certified":["Certificato","Certifié","Certificado","Zertifiziert"],
 "Each stone comes with its lab report from a recognised gemmological laboratory.":["Ogni pietra è accompagnata dal rapporto di un laboratorio gemmologico riconosciuto.","Chaque pierre est accompagnée de son rapport d'un laboratoire gemmologique reconnu.","Cada piedra incluye su informe de un laboratorio gemológico reconocido.","Jeder Stein wird mit dem Bericht eines anerkannten gemmologischen Labors geliefert."],
 "Transparent":["Trasparente","Transparent","Transparente","Transparent"],
 "Species, origin and treatment are disclosed for every stone, with no surprises.":["Specie, origine e trattamento sono dichiarati per ogni pietra, senza sorprese.","Espèce, origine et traitement sont communiqués pour chaque pierre, sans mauvaise surprise.","Especie, origen y tratamiento se declaran en cada piedra, sin sorpresas.","Art, Herkunft und Behandlung werden für jeden Stein offengelegt, ohne Überraschungen."],
-"Personal":["Personale","Personnel","Personal","Persönlich"],
+"Personal":["Diretto","Contact direct","Trato personal","Persönlich"],
 "Talk directly to our team in Milano, Mumbai or Bangkok, by phone or WhatsApp, about what you need.":["Parla direttamente con il nostro team a Milano, Mumbai o Bangkok, per telefono o WhatsApp, di ciò che ti serve.","Parlez directement à notre équipe à Milano, Mumbai ou Bangkok, par téléphone ou WhatsApp, de ce dont vous avez besoin.","Hable directamente con nuestro equipo en Milano, Mumbai o Bangkok, por teléfono o WhatsApp, sobre lo que necesita.","Sprechen Sie direkt mit unserem Team in Milano, Mumbai oder Bangkok, per Telefon oder WhatsApp, über Ihren Bedarf."],
 "20,000+":["20.000+","20 000+","20.000+","20.000+"],
 "Natural diamonds":["Diamanti naturali","Diamants naturels","Diamantes naturales","Naturdiamanten"],
 "Certified gems":["Gemme certificate","Gemmes certifiées","Gemas certificadas","Zertifizierte Edelsteine"],
 "Certified rubies & sapphires":["Rubini e zaffiri certificati","Rubis et saphirs certifiés","Rubíes y zafiros certificados","Zertifizierte Rubine & Saphire"],
-"Diamond certificates":["Certificati diamanti","Certificats diamants","Certificados de diamantes","Diamantzertifikate"],
+"Diamond certificates":["Certificati per diamanti","Certificats de diamants","Certificados de diamantes","Diamantzertifikate"],
 "Origins in stock today":["Origini disponibili oggi","Origines en stock aujourd'hui","Orígenes en stock hoy","Herkünfte aktuell auf Lager"],
 "Offices: Milano, Mumbai, Bangkok":["Uffici: Milano, Mumbai, Bangkok","Bureaux : Milano, Mumbai, Bangkok","Oficinas: Milano, Mumbai, Bangkok","Büros: Milano, Mumbai, Bangkok"],
 "We work with":["Collaboriamo con","Nous travaillons avec","Trabajamos con","Wir arbeiten mit"],
@@ -55,7 +55,7 @@ var D={
 "Certified diamonds":["Diamanti certificati","Diamants certifiés","Diamantes certificados","Zertifizierte Diamanten"],
 "Certified diamonds above 0.30ct, with the laboratory report.":["Diamanti certificati sopra 0,30 ct, con rapporto di laboratorio.","Diamants certifiés de plus de 0,30 ct, avec rapport de laboratoire.","Diamantes certificados de más de 0,30 ct, con informe de laboratorio.","Zertifizierte Diamanten über 0,30 ct, mit Laborbericht."],
 "Certificates":["Certificati","Certificats","Certificados","Zertifikate"],
-"Reports you can trust.":["Rapporti di cui fidarsi.","Des rapports de confiance.","Informes en los que confiar.","Berichte, denen Sie vertrauen können."],
+"Reports you can trust.":["Rapporti affidabili.","Des rapports de confiance.","Informes en los que confiar.","Berichte, denen Sie vertrauen können."],
 "Our promise":["La nostra promessa","Notre engagement","Nuestro compromiso","Unser Versprechen"],
 "Full traceability":["Piena tracciabilità","Traçabilité complète","Trazabilidad total","Lückenlose Rückverfolgbarkeit"],
 "Every stone has a record. Before you buy, we tell you what the diamond is, who graded it, and what we know about where it came from.":["Ogni pietra ha una scheda. Prima di acquistare ti diciamo che diamante è, chi lo ha classificato e cosa sappiamo della sua provenienza.","Chaque pierre a son dossier. Avant votre achat, nous vous disons ce qu'est le diamant, qui l'a gradué et ce que nous savons de son origine.","Cada piedra tiene su registro. Antes de comprar, le decimos qué es el diamante, quién lo clasificó y qué sabemos sobre su procedencia.","Jeder Stein hat eine Akte. Vor dem Kauf sagen wir Ihnen, was der Diamant ist, wer ihn begutachtet hat und was wir über seine Herkunft wissen."],
@@ -134,11 +134,10 @@ function walk(root){
  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n,a=[];
  while(n=w.nextNode()){var p=n.parentNode;if(/^(SCRIPT|STYLE)$/.test(p.nodeName))continue;if(p.closest('[data-i18n],.lang'))continue;a.push(n)}
  a.forEach(tNode);
- var els=root.querySelectorAll?root.querySelectorAll('[placeholder]'):[];
+ var els=root.querySelectorAll?root.querySelectorAll('[placeholder],[aria-label]'):[];
  for(var k=0;k<els.length;k++)tAttr(els[k]);
- if(root.hasAttribute&&root.hasAttribute('placeholder'))tAttr(root)}
-function tAttr(el){var o=el.getAttribute('data-ph');if(o===null){o=el.getAttribute('placeholder');el.setAttribute('data-ph',o)}
- var i=LANGS.indexOf(lang)-1,r=i>=0?find(norm(o),i):null;el.setAttribute('placeholder',r!==null?r:o)}
+ if(root.hasAttribute&&(root.hasAttribute('placeholder')||root.hasAttribute('aria-label')))tAttr(root)}
+function tAttr(el){if(el.closest&&el.closest('.lang'))return;['placeholder','aria-label'].forEach(function(a){var cur=el.getAttribute(a);if(cur===null)return;var dk='data-o-'+a,o=el.getAttribute(dk);if(o===null){o=cur;el.setAttribute(dk,o)}var i=LANGS.indexOf(lang)-1,r=i>=0?find(norm(o),i):null;el.setAttribute(a,r!==null?r:o)})}
 function tH1(){var els=document.querySelectorAll('[data-i18n]');for(var k=0;k<els.length;k++){var e=els[k],key=e.getAttribute('data-i18n');if(!hstore.has(e))hstore.set(e,e.innerHTML);var i=LANGS.indexOf(lang)-1;e.innerHTML=(i>=0&&H1[key])?H1[key][i]:hstore.get(e)}}
 var TITLE=document.title;
 function apply(){
@@ -156,7 +155,7 @@ function observe(){
  obs.observe(document.body,{childList:true,subtree:true,characterData:true})}
 function set(l){if(LANGS.indexOf(l)<0)l='en';lang=l;try{localStorage.setItem('nd_lang',l)}catch(e){}apply()}
 function build(){
- var css=document.createElement('style');css.textContent='nav li.lang{display:flex;align-items:center;gap:2px}nav .lang button{background:none!important;border:0!important;color:inherit!important;font:500 11px Montserrat,sans-serif!important;letter-spacing:.12em;padding:6px 6px!important;min-height:0!important;width:auto!important;height:auto!important;opacity:.5;cursor:pointer;text-transform:uppercase;border-radius:0!important}nav .lang button[aria-pressed=true]{opacity:1;border-bottom:1px solid currentColor!important}nav .lang button:hover{opacity:1}@media(max-width:820px){nav ul li.lang{padding:10px 10px;gap:6px}}';
+ var css=document.createElement('style');css.textContent='nav li.lang{display:flex;align-items:center;gap:2px}nav .lang button{background:none!important;border:0!important;color:inherit!important;font:500 11px Montserrat,sans-serif!important;letter-spacing:.12em;padding:6px 6px!important;min-height:0!important;width:auto!important;height:auto!important;opacity:.5;cursor:pointer;text-transform:uppercase;border-radius:0!important}nav .lang button[aria-pressed=true]{opacity:1;border-bottom:1px solid currentColor!important}nav .lang button:hover{opacity:1}@media(max-width:820px){nav ul li.lang{padding:10px 10px;gap:6px}}@media(min-width:821px){html:not([lang=en]) .strip{font-size:clamp(12px,1.25vw,18px)!important;letter-spacing:.13em!important}html:not([lang=en]) .strip span{margin:0 14px!important}}';
  document.head.appendChild(css);
  var uls=document.querySelectorAll('nav ul');
  for(var k=0;k<uls.length;k++){var li=document.createElement('li');li.className='lang';li.setAttribute('translate','no');
