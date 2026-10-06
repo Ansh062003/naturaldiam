@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Natural Diam - Certified Rubies and Sapphires</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><div class="gem-root">
+<header class="top"><div class="wrap"><h1 id="name"></h1><p id="tag"></p></div></header>
+<div class="filters"><div class="wrap bar">
+  <label class="search">Search<input id="q" type="search" placeholder="Stock no., stone, shape"></label>
+  <label>Stone<select id="type"></select></label>
+  <label>Size<select id="size"><option value="">All sizes</option><option value="2-3">2 - 3 ct</option><option value="3-5">3 - 5 ct</option><option value="5-99">5 ct +</option></select></label>
+  <label>Heat<select id="heat"><option value="">All</option><option>No heat</option><option>Heated</option></select></label>
+  <label>Sort<select id="sort"><option value="">Default</option><option value="pa">Price low to high</option><option value="pd">Price high to low</option><option value="ca">Carat low to high</option><option value="cd">Carat high to low</option></select></label>
+  <button id="reset" type="button">Reset</button>
+</div></div>
+<main class="wrap"><p id="count" class="count"></p><div id="grid" class="grid"></div><p id="empty" class="empty" hidden>No stones match these filters.</p></main>
+<footer class="wrap foot"><p id="foot"></p></footer>
+</div>
+<script src="assets/stones.js"></script><script src="assets/videos.js"></script><script src="assets/app.js"></script></body></html>

@@ -1,0 +1,64 @@
+
+
+(function () {
+  var S = window.STONES || [], C = window.SITE || {};
+  var N = {stockno:'id',id:'id',stone:'type',type:'type',carat:'carat',weight:'carat',treatment:'heat',heat:'heat',shape:'shape',origin:'origin',certificate:'certificate',colour:'color',color:'color',dimensions:'dimensions',priceperct:'pricePerCarat',pricepercarat:'pricePerCarat',video:'video',status:'status',srno:'id',stonename:'type',certcolour:'color',certcolor:'color',sizelwxdmm:'dimensions',weightcts:'carat',size:'dimensions'};
+  function parseCSV(t){var rows=[],r=[],f='',q=false,i,c;for(i=0;i<t.length;i++){c=t[i];if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i++}else if(c=='"')q=false;else f+=c}else if(c=='"')q=true;else if(c==','){r.push(f);f=''}else if(c=='\n'){r.push(f);rows.push(r);r=[];f=''}else if(c!='\r')f+=c}if(f!==''||r.length){r.push(f);rows.push(r)}return rows}
+  function fromCSV(t){var rows=parseCSV(t),h=rows.shift().map(function(x){return N[x.toLowerCase().replace(/[^a-z]/g,'')]||null});return rows.map(function(r){var o={};h.forEach(function(k,i){if(k)o[k]=(r[i]||'').trim()});o.id=/^[0-9]/.test(o.id)?'#'+o.id:o.id;o.carat=parseFloat(o.carat);o.pricePerCarat=parseFloat(String(o.pricePerCarat).replace(/[^0-9.]/g,''));var _p=o.pricePerCarat,_u=_p<500?25:50;o.pricePerCarat=Math.round(_p/_u)*_u;return o}).filter(function(o){return o.id&&o.carat>0&&o.pricePerCarat>0&&!/^(sold|hold|reserved)$/i.test(o.status||'')})}
+  function cap(x){x=String(x||'').trim();return x?x.charAt(0).toUpperCase()+x.slice(1).toLowerCase():''}
+  function norm(o){var h=String(o.heat||'').toLowerCase().replace(/[^a-z]/g,''),t=String(o.type||'').toLowerCase(),sh=String(o.shape||'').toLowerCase(),og=String(o.origin||'').toLowerCase();
+    o.heat=/^(no ?heat|unheat|unheated|nh)/.test(String(o.heat||'').toLowerCase().trim())||h==='noheat'||h==='unheat'||h==='unheated'?'No heat':'Heated';
+    o.type=/ruby/.test(t)?'Ruby':/sapphire/.test(t)?'Sapphire':cap(o.type);
+    o.shape=/heart/.test(sh)?'Heart':/cush.*ov|ov.*cush/.test(sh)?'Cushion / Oval':/cush/.test(sh)?'Cushion':/oval/.test(sh)?'Oval':/oct/.test(sh)?'Octagon':/round/.test(sh)?'Round':cap(o.shape);
+    o.origin=/^moz/.test(og)?'Mozambique':/^(meda|mada)/.test(og)?'Madagascar':/ceylon|sri/.test(og)?'Sri Lanka':/africa/.test(og)?'Africa':(!og||og==='n/a')?'':cap(o.origin);
+    o.dimensions=String(o.dimensions||'').replace(/X/g,'x');return o}
+  function init(){
+    document.documentElement.setAttribute('data-source', window.__src || 'baked');
+    S=S.map(norm);
+  var $ = function (id) { return document.getElementById(id); };
+  $('name').textContent = C.name; $('tag').textContent = C.tagline;
+  $('foot').innerHTML = 'Contact: <a href="mailto:' + C.contact + '">' + C.contact + '</a>';
+  var types = []; S.forEach(function (s) { if (types.indexOf(s.type) < 0) types.push(s.type); });
+  $('type').innerHTML = '<option value="">All stones</option>' + types.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
+  var fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: C.currency || 'USD', maximumFractionDigits: 0 });
+  function esc(x) { return String(x == null ? '' : x).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function embed(u, id) {
+    if (!u) return '<div class="vid none"><span>Video coming soon</span></div>';
+    if (C.videoMode === 'link') return '<a class="vid none link" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer"><span>&#9654; Watch video</span></a>';
+    var m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{6,})/);
+    if (m) return '<div class="vid"><iframe loading="lazy" src="https://www.youtube.com/embed/' + m[1] + '" title="Video ' + esc(id) + '" allowfullscreen></iframe></div>';
+    m = u.match(/vimeo\.com\/(\d+)/);
+    if (m) return '<div class="vid"><iframe loading="lazy" src="https://player.vimeo.com/video/' + m[1] + '" title="Video ' + esc(id) + '" allowfullscreen></iframe></div>';
+    m = u.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
+    if (m) return '<div class="vid"><iframe loading="lazy" src="https://drive.google.com/file/d/' + m[1] + '/preview" title="Video ' + esc(id) + '" allowfullscreen></iframe></div>';
+    return '<div class="vid"><video poster="' + esc((window.__poster||{})[u]||'') + '" src="' + esc(u) + '" muted loop playsinline preload="metadata"></video><button class="pbtn" type="button" aria-label="Play video">&#9654;</button></div>';
+  }
+  function total(s) { return s.pricePerCarat * s.carat; }
+  function render() {
+    var q = $('q').value.toLowerCase(), t = $('type').value, z = $('size').value, h = $('heat').value, so = $('sort').value;
+    var r = S.filter(function (s) {
+      if (t && s.type !== t) return false;
+      if (h && s.heat !== h) return false;
+      if (z) { var p = z.split('-'); if (s.carat < +p[0] || s.carat >= +p[1]) return false; }
+      if (q && (s.id + ' ' + s.type + ' ' + s.shape + ' ' + (s.origin || '') + ' ' + (s.certificate||'')).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    if (so) r.sort(function (a, b) { return so === 'pa' ? total(a) - total(b) : so === 'pd' ? total(b) - total(a) : so === 'ca' ? a.carat - b.carat : b.carat - a.carat; });
+    $('count').textContent = r.length + ' of ' + S.length + ' stones';
+    $('empty').hidden = r.length > 0;
+    $('grid').innerHTML = r.map(function (s) {
+      return '<article class="card">' + embed(s.video, s.id) + '<div class="body"><h3>' + esc(s.type) + '<span>' + s.carat.toFixed(2) + ' ct</span></h3><p class="sid">' + esc(s.id) + (s.sample ? ' - sample' : '') + '</p><dl>' +
+        '<dt>Treatment</dt><dd>' + esc(s.heat) + '</dd><dt>Shape</dt><dd>' + esc(s.shape) + '</dd><dt>Size</dt><dd>' + esc(s.dimensions) + '</dd>' +
+        '<dt>Colour</dt><dd>' + esc(s.color||'-') + '</dd><dt>Origin</dt><dd>' + esc(s.origin||'-') + '</dd><dt>Certificate</dt><dd>' + esc(s.certificate||'-') + '</dd></dl>' +
+        '<p class="price"><span class="ppc">' + fmt.format(s.pricePerCarat) + ' <small>/ ct</small></span></p>' +
+        '<a class="ask" target="_blank" rel="noopener noreferrer" href="https://wa.me/393513976900?text=' + encodeURIComponent('Hello, I am interested in stone ' + s.id + ' (' + s.type + ', ' + s.carat.toFixed(2) + ' ct) on your website.') + '">Enquire on WhatsApp</a></div></article>';
+    }).join('');
+  }
+  ['q', 'type', 'size', 'heat', 'sort'].forEach(function (id) { $(id).addEventListener('input', render); });
+  $('reset').addEventListener('click', function () { ['q', 'type', 'size', 'heat', 'sort'].forEach(function (id) { $(id).value = ''; }); render(); });
+  $('grid').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('.vid') : null; if (!b) return; var v = b.querySelector('video'); if (!v) return; if (v.paused) { v.controls = true; v.play(); b.classList.add('playing'); } else if (e.target === v) { v.pause(); } });
+  render();
+  }
+  if (C.sheetCsvUrl) { fetch(C.sheetCsvUrl+(C.sheetCsvUrl.indexOf("?")<0?"?":"&")+"_="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){var d=fromCSV(t);if(d.length){window.__src='live';var vm={};S.forEach(function(b){if(b.video)vm[b.id]=b.video});d.forEach(function(o){if(!o.video&&vm[o.id])o.video=vm[o.id]});S=d}init()}).catch(init); } else init();
+})();
+
