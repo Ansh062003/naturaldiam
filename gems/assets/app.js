@@ -53,7 +53,6 @@
       return '<article class="card">' + embed(s.video, s.id) + '<div class="body"><h3>' + esc(s.type) + '<span>' + s.carat.toFixed(2) + ' ct</span></h3><p class="sid"><span>Stock no.</span> ' + esc(s.id) + (s.sample ? ' - sample' : '') + '</p><dl>' +
         '<dt>Treatment</dt><dd>' + esc(s.heat) + '</dd><dt>Shape</dt><dd>' + esc(s.shape) + '</dd><dt>Size</dt><dd>' + esc(s.dimensions) + '</dd>' +
         '<dt>Colour</dt><dd>' + esc(s.color||'-') + '</dd><dt>Origin</dt><dd>' + esc(s.origin||'-') + '</dd><dt>Certificate</dt><dd>' + esc(s.certificate||'-') + '</dd></dl>' +
-        '<p class="price"><span class="ppc">' + fmt.format(s.pricePerCarat) + ' <small>/ ct</small></span></p>' +
         '<a class="ask" target="_blank" rel="noopener noreferrer" href="https://wa.me/393513976900?text=' + encodeURIComponent('Hello, I am interested in stone ' + s.id + ' (' + s.type + ', ' + s.carat.toFixed(2) + ' ct) on your website.') + '">Enquire on WhatsApp</a></div></article>';
     }).join('');
   }
