@@ -20,7 +20,7 @@
   $('name').textContent = C.name; $('tag').textContent = C.tagline;
   $('foot').innerHTML = C.footHtml || ('Contact: <a href="mailto:' + C.contact + '">' + C.contact + '</a>');
   var types = []; S.forEach(function (s) { if (types.indexOf(s.type) < 0) types.push(s.type); });
-  $('type').innerHTML = '<option value="">All stones</option>' + types.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
+  $('type').innerHTML = '<option value="">Ruby/Sapphire</option>' + types.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
   var origins = []; S.forEach(function (s) { if (s.origin && origins.indexOf(s.origin) < 0) origins.push(s.origin); }); origins.sort();
   $('origin').innerHTML = '<option value="">All origins</option>' + origins.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
   var fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: C.currency || 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -38,13 +38,12 @@
   }
   function total(s) { return s.pricePerCarat * s.carat; }
   function render() {
-    var q = $('q').value.toLowerCase(), t = $('type').value, og = $('origin').value, z = $('size').value, h = $('heat').value, so = $('sort').value;
+    var t = $('type').value, og = $('origin').value, z = $('size').value, h = $('heat').value, so = $('sort').value;
     var r = S.filter(function (s) {
       if (t && s.type !== t) return false;
       if (og && s.origin !== og) return false;
       if (h && s.heat !== h) return false;
       if (z) { var p = z.split('-'); if (s.carat < +p[0] || s.carat >= +p[1]) return false; }
-      if (q && (s.id + ' ' + s.type + ' ' + s.shape + ' ' + (s.origin || '') + ' ' + (s.certificate||'')).toLowerCase().indexOf(q) < 0) return false;
       return true;
     });
     if (so) r.sort(function (a, b) { return so === 'pa' ? total(a) - total(b) : so === 'pd' ? total(b) - total(a) : so === 'ca' ? a.carat - b.carat : b.carat - a.carat; });
@@ -58,8 +57,8 @@
         '<a class="ask" target="_blank" rel="noopener noreferrer" href="https://wa.me/393513976900?text=' + encodeURIComponent('Hello, I am interested in stone ' + s.id + ' (' + s.type + ', ' + s.carat.toFixed(2) + ' ct) on your website.') + '">Enquire on WhatsApp</a></div></article>';
     }).join('');
   }
-  ['q', 'type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).addEventListener('input', render); });
-  $('reset').addEventListener('click', function () { ['q', 'type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).value = ''; }); render(); });
+  ['type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).addEventListener('input', render); });
+  $('reset').addEventListener('click', function () { ['type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).value = ''; }); render(); });
   $('grid').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('.vid') : null; if (!b) return; var v = b.querySelector('video'); if (!v) return; if (v.paused) { v.controls = true; v.play(); b.classList.add('playing'); } else if (e.target === v) { v.pause(); } });
   $('grid').addEventListener('error',function(e){var v=e.target;if(v.tagName!=='VIDEO')return;var card=v.closest('.card'),id=card&&card.querySelector('.sid');var stock=id&&id.textContent.match(/#[0-9.]+/);var fallback=stock&&(window.VIDEO_MAP||{})[stock[0]];if(fallback&&!v.dataset.fallback){v.dataset.fallback='1';v.poster=(window.__poster||{})[fallback]||'';v.src=fallback;v.load();}},true);
   render();
