@@ -52,7 +52,7 @@
     $('count').textContent = r.length + ' of ' + S.length + ' stones';
     $('empty').hidden = r.length > 0;
     $('grid').innerHTML = r.map(function (s) {
-      return '<article class="card" data-stock-id="' + esc(s.id) + '">' + embed(s.video, displayId(s.id)) + '<div class="body"><h3>' + esc(s.type) + '<span>' + s.carat.toFixed(2) + ' ct</span></h3><p class="sid"><span>Stock no.</span> ' + esc(displayId(s.id)) + (s.sample ? ' - sample' : '') + '</p><dl>' +
+      return '<article class="card" data-stock-id="' + esc(s.id) + '">' + embed(s.video, displayId(s.id)) + '<div class="body"><h3>' + esc(s.type) + '<span>' + s.carat.toFixed(2) + ' ct</span></h3><p class="sid"><span>Stock no.</span> ' + esc(displayId(s.id)) + (s.sample ? ' - sample' : '') + '</p><p class="stone-color">' + esc(s.color || 'Colour not specified') + '</p><dl>' +
         '<dt>Treatment</dt><dd>' + esc(s.heat) + '</dd>' +
         ((s.origin || s.certificate) ? '<dt>Origin / Certificate</dt><dd>' + (s.origin ? '<span>' + esc(s.origin) + '</span>' : '') + (s.origin && s.certificate ? ' · ' : '') + (s.certificate ? '<span>' + esc(s.certificate) + '</span>' : '') + '</dd>' : '') + '</dl>' +
         (C.showPrices ? '<p class="price"><span class="ppc">' + fmt.format(s.pricePerCarat) + ' <small>/ ct</small></span></p>' : '') +
