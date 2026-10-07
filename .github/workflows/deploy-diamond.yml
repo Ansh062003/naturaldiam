@@ -1,6 +1,6 @@
 name: Deploy diamond inventory backend
-on:
-  workflow_dispatch:
+true:
+  workflow_dispatch: null
 permissions:
   contents: read
 jobs:
@@ -8,53 +8,67 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Deploy isolated stock pipeline
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          KPS_API_USER: ${{ secrets.KPS_API_USER }}
-        run: |
-          python3 - <<'PY'
-          import os,json,uuid,requests,base64,time
-          ref='eigdjzygkqyslwpcaotp';base='https://api.supabase.com/v1/projects/'+ref
-          session=requests.Session();session.headers['Authorization']='Bearer '+os.environ['SUPABASE_ACCESS_TOKEN']
-          def api(path,**kwargs):
-           r=session.request(kwargs.pop('method','POST'),base+path,timeout=90,**kwargs)
-           if not r.ok:raise RuntimeError('Supabase API '+path+' failed: '+str(r.status_code))
-           return r.json() if r.content else None
-          def sql(q):return api('/database/query',json={'query':q})
-          SCHEMA='create table if not exists public.diamond_catalogue_snapshot (\n id integer primary key check (id=1),\n fetched_at timestamptz not null,\n expires_at timestamptz not null,\n payload jsonb not null\n);\nalter table public.diamond_catalogue_snapshot enable row level security;\nrevoke all on public.diamond_catalogue_snapshot from anon, authenticated;\ngrant select on public.diamond_catalogue_snapshot to anon, authenticated;\ndrop policy if exists "Only fresh sanitized diamond snapshot" on public.diamond_catalogue_snapshot;\ncreate policy "Only fresh sanitized diamond snapshot" on public.diamond_catalogue_snapshot\nfor select to anon,authenticated using (expires_at > now());\n\ngrant all on public.diamond_catalogue_snapshot to service_role;\nnotify pgrst, \'reload schema\';\n'
-          SOURCE='// KPS importer. Server-only credential; public output contains customer data only.\nconst shapes:Record<string,string>={ROUND:\'Round\',PRINCESS:\'Princess\',PEAR:\'Pear\',MARQUISE:\'Marquise\',EMERALD:\'Emerald\',\'CUSHION CUT\':\'Cushion\',OVAL:\'Oval\',RADIANT:\'Radiant\'};\nfunction csv(text:string){const rows:string[][]=[];let row:string[]=[],v=\'\',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(quoted){if(c===\'"\'&&text[i+1]===\'"\'){v+=\'"\';i++}else if(c===\'"\')quoted=false;else v+=c}else if(c===\'"\')quoted=true;else if(c===\',\'){row.push(v);v=\'\'}else if(c===\'\\n\'){row.push(v);rows.push(row);row=[];v=\'\'}else if(c!==\'\\r\')v+=c}if(v||row.length){row.push(v);rows.push(row)}if(quoted)throw Error(\'Malformed CSV\');const headers=rows.shift()!.map(x=>x.replace(/^\\uFEFF/,\'\'));return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]||\'\'])))}\nasync function checked(url:string,init?:RequestInit){const r=await fetch(url,{...init,signal:AbortSignal.timeout(45000)});if(!r.ok)throw Error(\'Upstream request failed\');return r;}\nDeno.serve(async(req:Request)=>{\n const serviceKey=Deno.env.get(\'SUPABASE_SERVICE_ROLE_KEY\')!;\n if(req.method!==\'POST\'||req.headers.get(\'x-refresh-token\')!==Deno.env.get(\'DIAMOND_REFRESH_TOKEN\'))return new Response(\'Unauthorized\',{status:401});\n let stage="credential";\n try{\n const secret=Deno.env.get(\'KPS_API_USER\');if(!secret)throw Error(\'Missing provider credential\');\n stage="provider_receipt";const receipt=await (await checked(\'https://kps.diamonds:8443/estock/apistock?user=\'+encodeURIComponent(secret))).json();\n const file=new URL(receipt.fileUrl);if(receipt.status!==\'ok\'||file.protocol!==\'https:\'||file.hostname!==\'kps.diamonds\')throw Error(\'Invalid provider receipt\');\n stage="provider_csv";const rows=csv(await (await checked(file.href)).text());if(!rows.length)throw Error(\'Empty export\');\n stage="normalize";const seen=new Set<string>();const stones=[];\n for(const r of rows){const ref=r.STOCKID.trim();if(!ref||seen.has(ref))throw Error(\'Invalid references\');seen.add(ref);if(r.STATUS.trim()!==\'PROMOTION\')continue;\n const carat=Number(r.CARAT),rap=Number(r.RAPPRICE),disc=Number(r.DISC),sourcePrice=Number(r.PRICE),sourceTotal=Number(r.VALUE);\n if(![carat,rap,disc,sourcePrice,sourceTotal].every(Number.isFinite)||carat<=0||rap<=0||disc>0||disc< -100||Math.abs(sourcePrice*carat-sourceTotal)>.02||Math.abs(rap*(1+disc/100)-sourcePrice)>.02)throw Error(\'Invalid numeric data\');\n const discount=-(disc+7),perCt=rap*(1+(disc+7)/100),total=perCt*carat;\n stones.push({id:stones.length+1,ref,shape:shapes[r.SHAPE]||r.SHAPE,carat,color:r.COLOR,clarity:r.CLARITY,cut:r.CUT||\'-\',lab:r.CERT,measure:r.MEASUREMENT,polish:r.POL,symmetry:r.SYM,fluorescence:r.FLUOR,discount,perCt:discount>60?Number(perCt.toFixed(2)):null,total:discount>60?Number(total.toFixed(2)):null});}\n if(!stones.length)throw Error(\'No available records\');\n const fetched=new Date(),expires=new Date(fetched.getTime()+2*60*60*1000);\n const base=Deno.env.get(\'SUPABASE_URL\')!;\n stage="save_snapshot";await checked(base+\'/rest/v1/diamond_catalogue_snapshot?on_conflict=id\',{method:\'POST\',headers:{apikey:serviceKey,Authorization:`Bearer ${serviceKey}`,\'Content-Type\':\'application/json\',Prefer:\'resolution=merge-duplicates\'},body:JSON.stringify({id:1,fetched_at:fetched.toISOString(),expires_at:expires.toISOString(),payload:stones})});\n return Response.json({ok:true,count:stones.length,priced:stones.filter(s=>s.total!==null).length,fetched_at:fetched.toISOString(),expires_at:expires.toISOString()});\n }catch{return Response.json({ok:false,stage,error:\'Refresh failed; previous snapshot retained until expiry.\'},{status:502})}\n});\n'
-          print('Validating deployment permissions',flush=True)
-          api('/functions',method='GET')
-          sql(SCHEMA)
-          print('Snapshot table and fresh-only public policy created',flush=True)
-          time.sleep(8)
-          refresh_token=uuid.uuid4().hex+uuid.uuid4().hex
-          api('/secrets',json=[{'name':'KPS_API_USER','value':os.environ['KPS_API_USER']},{'name':'DIAMOND_REFRESH_TOKEN','value':refresh_token}])
-          print('Server-side provider and refresh secrets installed',flush=True)
-          api('/functions/deploy?slug=diamond-stock-refresh',files={'file':('index.ts',SOURCE,'application/typescript')},data={'metadata':json.dumps({'name':'diamond-stock-refresh','entrypoint_path':'index.ts','verify_jwt':False})})
-          print('Importer deployed',flush=True)
-          url='https://'+ref+'.supabase.co/functions/v1/diamond-stock-refresh'
-          r=requests.post(url,headers={'x-refresh-token':refresh_token},timeout=120)
-          if not r.ok:raise RuntimeError('First refresh failed: '+str(r.status_code)+' stage='+str(r.json().get('stage'))) 
-          receipt=r.json();assert receipt.get('ok') and receipt['count']>0
-          print('First refresh:',json.dumps(receipt),flush=True)
-          # Dedicated refresh token in the project's encrypted Vault, never the admin key.
-          q="""create extension if not exists pg_cron; create extension if not exists pg_net;
-          do $$ begin
-          if exists(select 1 from vault.secrets where name='diamond_refresh_token') then
-          perform vault.update_secret((select id from vault.secrets where name='diamond_refresh_token'), '%s');
-          else perform vault.create_secret('%s','diamond_refresh_token'); end if; end $$;
-          select cron.unschedule(jobid) from cron.job where jobname='diamond-stock-hourly';
-          select cron.schedule('diamond-stock-hourly','17 * * * *',$cron$
-          select net.http_post(url:='%s',headers:=jsonb_build_object('Content-Type','application/json','x-refresh-token',(select decrypted_secret from vault.decrypted_secrets where name='diamond_refresh_token')),body:='{}'::jsonb,timeout_milliseconds:=120000);
-          $cron$);"""%(refresh_token,refresh_token,url)
-          sql(q)
-          print('Hourly job installed; expiry 2 hours',flush=True)
-          # Role-policy test without changing the live record.
-          check=sql("begin; set local role anon; select count(*) as fresh_rows from public.diamond_catalogue_snapshot; rollback;")
-          print('Fresh anonymous access check:',json.dumps(check),flush=True)
-          expired=sql("begin; update public.diamond_catalogue_snapshot set expires_at=now()-interval '1 minute' where id=1; set local role anon; select count(*) as expired_rows from public.diamond_catalogue_snapshot; rollback;")
-          print('Expired anonymous access check:',json.dumps(expired),flush=True)
-          print('Deployment done',flush=True)
-          PY
+    - name: Deploy isolated stock pipeline
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        KPS_API_USER: ${{ secrets.KPS_API_USER }}
+      run: "python3 - <<'PY'\nimport os,json,uuid,requests,base64,time\nref='eigdjzygkqyslwpcaotp';base='https://api.supabase.com/v1/projects/'+ref\n\
+        session=requests.Session();session.headers['Authorization']='Bearer '+os.environ['SUPABASE_ACCESS_TOKEN']\ndef api(path,**kwargs):\n\
+        \ r=session.request(kwargs.pop('method','POST'),base+path,timeout=90,**kwargs)\n if not r.ok:raise RuntimeError('Supabase\
+        \ API '+path+' failed: '+str(r.status_code))\n return r.json() if r.content else None\ndef sql(q):return api('/database/query',json={'query':q})\n\
+        SCHEMA='create table if not exists public.diamond_catalogue_snapshot (\\n id integer primary key check (id=1),\\n\
+        \ fetched_at timestamptz not null,\\n expires_at timestamptz not null,\\n payload jsonb not null\\n);\\nalter table\
+        \ public.diamond_catalogue_snapshot enable row level security;\\nrevoke all on public.diamond_catalogue_snapshot from\
+        \ anon, authenticated;\\ngrant select on public.diamond_catalogue_snapshot to anon, authenticated;\\ndrop policy if\
+        \ exists \"Only fresh sanitized diamond snapshot\" on public.diamond_catalogue_snapshot;\\ncreate policy \"Only fresh\
+        \ sanitized diamond snapshot\" on public.diamond_catalogue_snapshot\\nfor select to anon,authenticated using (expires_at\
+        \ > now());\\n\\ngrant all on public.diamond_catalogue_snapshot to service_role;\\nnotify pgrst, \\'reload schema\\\
+        ';\\n'\nSOURCE='// KPS importer. Server-only credential; public output contains customer data only.\\nconst shapes:Record<string,string>={ROUND:\\\
+        'Round\\',PRINCESS:\\'Princess\\',PEAR:\\'Pear\\',MARQUISE:\\'Marquise\\',EMERALD:\\'Emerald\\',\\'CUSHION CUT\\':\\\
+        'Cushion\\',OVAL:\\'Oval\\',RADIANT:\\'Radiant\\'};\\nfunction csv(text:string){const rows:string[][]=[];let row:string[]=[],v=\\\
+        '\\',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(quoted){if(c===\\'\"\\'&&text[i+1]===\\'\"\\'){v+=\\\
+        '\"\\';i++}else if(c===\\'\"\\')quoted=false;else v+=c}else if(c===\\'\"\\')quoted=true;else if(c===\\',\\'){row.push(v);v=\\\
+        '\\'}else if(c===\\'\\\\n\\'){row.push(v);rows.push(row);row=[];v=\\'\\'}else if(c!==\\'\\\\r\\')v+=c}if(v||row.length){row.push(v);rows.push(row)}if(quoted)throw\
+        \ Error(\\'Malformed CSV\\');const headers=rows.shift()!.map(x=>x.replace(/^\\\\uFEFF/,\\'\\'));return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]||\\\
+        '\\'])))}\\nasync function checked(url:string,init?:RequestInit){const r=await fetch(url,{...init,signal:AbortSignal.timeout(45000)});if(!r.ok)throw\
+        \ Error(\\'Upstream request failed\\');return r;}\\nDeno.serve(async(req:Request)=>{\\n const serviceKey=Deno.env.get(\\\
+        'SUPABASE_SERVICE_ROLE_KEY\\')!;\\n if(req.method!==\\'POST\\'||req.headers.get(\\'x-refresh-token\\')!==Deno.env.get(\\\
+        'DIAMOND_REFRESH_TOKEN\\'))return new Response(\\'Unauthorized\\',{status:401});\\n let stage=\"credential\";\\n try{\\\
+        n const secret=Deno.env.get(\\'KPS_API_USER\\');if(!secret)throw Error(\\'Missing provider credential\\');\\n stage=\"\
+        provider_receipt\";const receipt=await (await checked(\\'https://kps.diamonds:8443/estock/apistock?user=\\'+encodeURIComponent(secret))).json();\\\
+        n const file=new URL(receipt.fileUrl);if(receipt.status!==\\'ok\\'||file.protocol!==\\'https:\\'||file.hostname!==\\\
+        'kps.diamonds\\')throw Error(\\'Invalid provider receipt\\');\\n stage=\"provider_csv\";const rows=csv(await (await\
+        \ checked(file.href)).text());if(!rows.length)throw Error(\\'Empty export\\');\\n stage=\"normalize\";const seen=new\
+        \ Set<string>();const stones=[];\\n for(const r of rows){const ref=r.STOCKID.trim();if(!ref||seen.has(ref))throw Error(\\\
+        'Invalid references\\');seen.add(ref);if(r.STATUS.trim()!==\\'PROMOTION\\'||r.TINCH?.trim().toUpperCase()!==\\'NONE\\\
+        '||r.LUSTER?.trim().toUpperCase()!==\\'EX\\')continue;\\n const carat=Number(r.CARAT),rap=Number(r.RAPPRICE),disc=Number(r.DISC),sourcePrice=Number(r.PRICE),sourceTotal=Number(r.VALUE);\\\
+        n if(![carat,rap,disc,sourcePrice,sourceTotal].every(Number.isFinite)||carat<=0||rap<=0||disc>0||disc< -100||Math.abs(sourcePrice*carat-sourceTotal)>.02||Math.abs(rap*(1+disc/100)-sourcePrice)>.02)throw\
+        \ Error(\\'Invalid numeric data\\');\\n const discount=-(disc+7),perCt=rap*(1+(disc+7)/100),total=perCt*carat;\\n\
+        \ stones.push({id:stones.length+1,ref,shape:shapes[r.SHAPE]||r.SHAPE,carat,color:r.COLOR,clarity:r.CLARITY,cut:r.CUT||\\\
+        '-\\',lab:r.CERT,measure:r.MEASUREMENT,polish:r.POL,symmetry:r.SYM,fluorescence:r.FLUOR,discount,perCt:discount>60?Number(perCt.toFixed(2)):null,total:discount>60?Number(total.toFixed(2)):null});}\\\
+        n if(!stones.length)throw Error(\\'No available records\\');\\n const fetched=new Date(),expires=new Date(fetched.getTime()+2*60*60*1000);\\\
+        n const base=Deno.env.get(\\'SUPABASE_URL\\')!;\\n stage=\"save_snapshot\";await checked(base+\\'/rest/v1/diamond_catalogue_snapshot?on_conflict=id\\\
+        ',{method:\\'POST\\',headers:{apikey:serviceKey,Authorization:`Bearer ${serviceKey}`,\\'Content-Type\\':\\'application/json\\\
+        ',Prefer:\\'resolution=merge-duplicates\\'},body:JSON.stringify({id:1,fetched_at:fetched.toISOString(),expires_at:expires.toISOString(),payload:stones})});\\\
+        n return Response.json({ok:true,count:stones.length,priced:stones.filter(s=>s.total!==null).length,fetched_at:fetched.toISOString(),expires_at:expires.toISOString()});\\\
+        n }catch{return Response.json({ok:false,stage,error:\\'Refresh failed; previous snapshot retained until expiry.\\\
+        '},{status:502})}\\n});\\n'\nprint('Validating deployment permissions',flush=True)\napi('/functions',method='GET')\n\
+        sql(SCHEMA)\nprint('Snapshot table and fresh-only public policy created',flush=True)\ntime.sleep(8)\nrefresh_token=uuid.uuid4().hex+uuid.uuid4().hex\n\
+        api('/secrets',json=[{'name':'KPS_API_USER','value':os.environ['KPS_API_USER']},{'name':'DIAMOND_REFRESH_TOKEN','value':refresh_token}])\n\
+        print('Server-side provider and refresh secrets installed',flush=True)\napi('/functions/deploy?slug=diamond-stock-refresh',files={'file':('index.ts',SOURCE,'application/typescript')},data={'metadata':json.dumps({'name':'diamond-stock-refresh','entrypoint_path':'index.ts','verify_jwt':False})})\n\
+        print('Importer deployed',flush=True)\nurl='https://'+ref+'.supabase.co/functions/v1/diamond-stock-refresh'\nr=requests.post(url,headers={'x-refresh-token':refresh_token},timeout=120)\n\
+        if not r.ok:raise RuntimeError('First refresh failed: '+str(r.status_code)+' stage='+str(r.json().get('stage'))) \n\
+        receipt=r.json();assert receipt.get('ok') and receipt['count']>0\nprint('First refresh:',json.dumps(receipt),flush=True)\n\
+        # Dedicated refresh token in the project's encrypted Vault, never the admin key.\nq=\"\"\"create extension if not\
+        \ exists pg_cron; create extension if not exists pg_net;\ndo $$ begin\nif exists(select 1 from vault.secrets where\
+        \ name='diamond_refresh_token') then\nperform vault.update_secret((select id from vault.secrets where name='diamond_refresh_token'),\
+        \ '%s');\nelse perform vault.create_secret('%s','diamond_refresh_token'); end if; end $$;\nselect cron.unschedule(jobid)\
+        \ from cron.job where jobname='diamond-stock-hourly';\nselect cron.schedule('diamond-stock-hourly','17 * * * *',$cron$\n\
+        select net.http_post(url:='%s',headers:=jsonb_build_object('Content-Type','application/json','x-refresh-token',(select\
+        \ decrypted_secret from vault.decrypted_secrets where name='diamond_refresh_token')),body:='{}'::jsonb,timeout_milliseconds:=120000);\n\
+        $cron$);\"\"\"%(refresh_token,refresh_token,url)\nsql(q)\nprint('Hourly job installed; expiry 2 hours',flush=True)\n\
+        # Role-policy test without changing the live record.\ncheck=sql(\"begin; set local role anon; select count(*) as fresh_rows\
+        \ from public.diamond_catalogue_snapshot; rollback;\")\nprint('Fresh anonymous access check:',json.dumps(check),flush=True)\n\
+        expired=sql(\"begin; update public.diamond_catalogue_snapshot set expires_at=now()-interval '1 minute' where id=1;\
+        \ set local role anon; select count(*) as expired_rows from public.diamond_catalogue_snapshot; rollback;\")\nprint('Expired\
+        \ anonymous access check:',json.dumps(expired),flush=True)\nprint('Deployment done',flush=True)\nPY\n"
