@@ -1,18 +1,28 @@
-NATURAL DIAM - LIVE SHOWCASE SITE (static, reads Google Sheet live)
+NATURAL DIAM WEBSITE
 
-SITE LAYOUT: index.html = homepage (naturaldiam.it). gems/ = live stock catalogue (naturaldiam.it/gems). Upload the whole folder to the web host root. No WordPress, PHP or database needed.
+The public website is hosted on GitHub Pages. The stock catalogue reads Supabase first.
 
-LIVE DATA: gems/assets/stones.js already has sheetCsvUrl set to the published Google Sheet CSV. To change the sheet, edit that URL. Prices from the sheet are rounded to nearest 50 USD (nearest 25 under 500).
-  sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/XXXX/pub?output=csv"
-The site re-reads the sheet on every page load. If the sheet cannot be loaded, it shows the 24 baked stones.
-Sheet columns used (header names, any order): Stock Numero (or Stock No / Sr. No.), Stone Name, Weight (Cts), Treatment, Shape, Origin, Certificate, Cert. Colour, Measurement, Al / Ct $ (or Price per ct), Status. Optional. Rows with Status sold/hold/reserved are hidden.
+Dashboard: https://supabase.com/dashboard/project/eigdjzygkqyslwpcaotp
+Stock table: public.stones
+Media bucket: videos (public read)
 
-NEW STONES / VIDEOS: a new row in the sheet shows up automatically (card says "Video coming soon").
-To add its video: put the mp4 in gems/assets/videos/ and a poster jpg in gems/assets/posters/, then add a line to gems/assets/videos.js
-  in VIDEO_MAP:  "#45":"assets/videos/v45.mp4"   and in __poster: "assets/videos/v45.mp4":"assets/posters/v45.jpg"
-(Or put a YouTube / Vimeo / Google Drive link in a "Video" column of the sheet.)
+EDIT STOCK
+Open Table Editor, select stones, then edit the row. Use a unique id such as #46. Fields: type, carat, origin, heat, shape, certificate, color, dimensions, price_per_carat, video_path, poster_path, status.
+Prices are exact USD per carat, not rounded. Leave origin NULL when unknown. Certificate is the company name only, not its report number. status available is public; other statuses are hidden.
 
-DNS (domain person): add ONLY website records. DO NOT change MX, TXT, SPF, DKIM or any email records.
+ADD VIDEO
+Upload the MP4 and its JPG poster into the videos bucket. Put their exact stored paths into video_path and poster_path on the matching stone. Paths are relative to the bucket, for example videos/v1.mp4 and posters/v1.jpg. The dashboard may prefix uploaded filenames; always use its actual path. Leave both paths NULL for a stone with no video.
 
+SECURITY
+Only the publishable key is used in the website. Public users can SELECT available stock, not insert, update or delete it. Media are public read; no public upload/delete policy is configured. Never put a secret or service-role key into website files.
 
-Prices: shown on the stone cards only if showPrices is true in gems/assets/stones.js (currently false = hidden). Change false to true to show prices and the price sort again.
+FALLBACKS
+If Supabase does not respond, the catalogue tries the published Google Sheet, then the baked stock data in gems/assets/stones.js. Those are separate backup copies, not automatic mirrors of new Supabase edits. GitHub-hosted clips/posters remain as media fallback. Keep backups current when stock changes.
+
+The Free Supabase project can pause after inactivity. Fallback does not guarantee current stock or uptime. No keep-alive guarantee is configured.
+
+PRICES AND LANGUAGES
+showPrices in gems/assets/stones.js controls visible prices. It is currently true. The existing English/Italian/French/Spanish/German translations are self-written, not native-reviewed.
+
+DNS
+No custom domain is configured yet. Do not change MX, TXT, SPF, DKIM or other email records when adding website DNS.
