@@ -61,7 +61,34 @@
   ['q', 'type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).addEventListener('input', render); });
   $('reset').addEventListener('click', function () { ['q', 'type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).value = ''; }); render(); });
   $('grid').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('.vid') : null; if (!b) return; var v = b.querySelector('video'); if (!v) return; if (v.paused) { v.controls = true; v.play(); b.classList.add('playing'); } else if (e.target === v) { v.pause(); } });
+  $('grid').addEventListener('error',function(e){var v=e.target;if(v.tagName!=='VIDEO')return;var card=v.closest('.card'),id=card&&card.querySelector('.sid');var stock=id&&id.textContent.match(/#[0-9.]+/);var fallback=stock&&(window.VIDEO_MAP||{})[stock[0]];if(fallback&&!v.dataset.fallback){v.dataset.fallback='1';v.poster=(window.__poster||{})[fallback]||'';v.src=fallback;v.load();}},true);
   render();
   }
-  if (C.sheetCsvUrl) { fetch(C.sheetCsvUrl+(C.sheetCsvUrl.indexOf("?")<0?"?":"&")+"_="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){var d=fromCSV(t);if(d.length){window.__src='live';var vm={};S.forEach(function(b){if(b.video)vm[b.id]=b.video});d.forEach(function(o){if(!o.video&&vm[o.id])o.video=vm[o.id]});S=d}init()}).catch(init); } else init();
+  function request(url, opts) {
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = setTimeout(function(){if(ctrl)ctrl.abort();}, 8000);
+    opts=opts||{}; if(ctrl)opts.signal=ctrl.signal;
+    return fetch(url,opts).then(function(r){clearTimeout(timer);if(!r.ok)throw Error('Stock unavailable');return r;},function(e){clearTimeout(timer);throw e;});
+  }
+  function sheetFallback(){
+    if(!C.sheetCsvUrl){init();return;}
+    request(C.sheetCsvUrl+(C.sheetCsvUrl.indexOf('?')<0?'?':'&')+'_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){
+      var d=fromCSV(t);if(!d.length)throw Error('Empty sheet');
+      d.forEach(function(o){if(!o.video)o.video=(window.VIDEO_MAP||{})[o.id]||'';});
+      S=d;window.__src='sheet';init();
+    }).catch(function(){window.__src='baked';init();});
+  }
+  if(C.supabaseUrl && C.supabaseKey){
+    request(C.supabaseUrl+'/rest/v1/stones?select=*&status=eq.available&order=carat',{headers:{apikey:C.supabaseKey},cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+      if(!Array.isArray(d))throw Error('Invalid stock');
+      var base=C.supabaseUrl+'/storage/v1/object/public/videos/';
+      var next=d.map(function(o){o.pricePerCarat=Number(o.price_per_carat);o.carat=Number(o.carat);
+        o.video=o.video_path?base+o.video_path:'';
+        if(o.video){window.__poster=window.__poster||{};window.__poster[o.video]=o.poster_path?base+o.poster_path:'';}
+        return o;});
+      if(next.some(function(o){return !o.id||!(o.carat>0)||!(o.pricePerCarat>0);}))throw Error('Invalid stone');
+      next.sort(function(a,b){return parseFloat(a.id.replace('#',''))-parseFloat(b.id.replace('#',''));});
+      S=next;window.__src='supabase';init();
+    }).catch(sheetFallback);
+  }else sheetFallback();
 })();
