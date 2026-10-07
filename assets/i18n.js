@@ -71,6 +71,7 @@ var D={
 "The collection":["La collezione","La collection","La colección","Die Kollektion"],
 "Search":["Cerca","Recherche","Buscar","Suche"],
 "Stone":["Pietra","Pierre","Piedra","Stein"],
+"Ruby/Sapphire":["Rubini/Zaffiri","Rubis/Saphirs","Rubíes/Zafiros","Rubine/Saphire"],
 "All stones":["Tutte le pietre","Toutes les pierres","Todas las piedras","Alle Steine"],
 "Size":["Dimensione","Taille","Tamaño","Größe"],
 "All sizes":["Tutte le dimensioni","Toutes les tailles","Todos los tamaños","Alle Größen"],
