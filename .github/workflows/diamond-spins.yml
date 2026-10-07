@@ -1,0 +1,69 @@
+name: Cache diamond360 frames
+'on':
+  workflow_dispatch: {}
+  schedule:
+  - cron: 43 * * * *
+permissions:
+  contents: read
+concurrency:
+  group: diamond-spin-cache
+  cancel-in-progress: false
+jobs:
+  spin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+    - run: python3 -m pip install requests Pillow cryptography
+    - env:
+        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        KPS_API_USER: ${{ secrets.KPS_API_USER }}
+      run: "python3 - <<'PY'\nimport os,io,json,csv,re,hashlib,time,concurrent.futures,requests\nfrom urllib.parse import\
+        \ urlparse,unquote\nfrom PIL import Image,ImageOps\nref='eigdjzygkqyslwpcaotp';control='https://api.supabase.com/v1/projects/'+ref\n\
+        admin=requests.Session();admin.headers['Authorization']='Bearer '+os.environ['SUPABASE_ACCESS_TOKEN']\ndef api(path,method='POST',**kw):\n\
+        \ r=admin.request(method,control+path,timeout=90,**kw);r.raise_for_status();return r.json() if r.content else None\n\
+        def sql(q):return api('/database/query',json={'query':q})\n# Never print supplier URLs, credentials or response bodies.\n\
+        keys=api('/api-keys','GET');key=next(x['api_key'] for x in keys if x['name']=='service_role')\nbase='https://'+ref+'.supabase.co';headers={'apikey':key,'Authorization':'Bearer\
+        \ '+key}\ndef store(path,method='GET',**kw):\n r=requests.request(method,base+'/storage/v1/'+path,headers={**headers,**kw.pop('headers',{})},timeout=40,**kw);r.raise_for_status();return\
+        \ r.json() if r.content and 'json' in r.headers.get('content-type','') else None\n# Fixed authenticated source, never\
+        \ an arbitrary-URL proxy.\nreceipt=requests.get('https://kps.diamonds:8443/estock/apistock',params={'user':os.environ['KPS_API_USER']},timeout=60).json()\n\
+        u=urlparse(receipt.get('fileUrl',''))\nif receipt.get('status')!='ok' or u.scheme!='https' or u.hostname!='kps.diamonds':raise\
+        \ RuntimeError('Invalid stock receipt')\nr=requests.get(u.geturl(),timeout=90);r.raise_for_status();rows=list(csv.DictReader(io.StringIO(r.content.decode('utf-8-sig'))))\n\
+        snap=sql('select payload,expires_at>now() as fresh from public.diamond_catalogue_snapshot where id=1')[0]\nif not\
+        \ snap['fresh']:raise RuntimeError('Stock snapshot expired')\nlive={s['ref']:s for s in snap['payload']};source={r['STOCKID'].strip():r\
+        \ for r in rows if r['STATUS'].strip()=='PROMOTION'}\nif len(set(live)&set(source))<.95*len(live):raise RuntimeError('Source/snapshot\
+        \ mismatch')\nORDER_KEY='2606198511121984'\nimport base64\nfrom cryptography.hazmat.primitives.ciphers import Cipher,algorithms,modes\n\
+        from cryptography.hazmat.primitives.padding import PKCS7\n# Only cached pixels and numeric frame dimensions are public.\
+        \ No viewer HTML/scripts/metadata leaves this worker.\nsql('''create table if not exists public.diamond_spin_cache(ref\
+        \ text primary key,sprite text not null,width integer not null,height integer not null,frames integer not null,updated_at\
+        \ timestamptz not null default now());\nalter table public.diamond_spin_cache enable row level security;revoke all\
+        \ on public.diamond_spin_cache from anon,authenticated;grant select on public.diamond_spin_cache to anon,authenticated;grant\
+        \ all on public.diamond_spin_cache to service_role;\ndrop policy if exists \"Fresh stock spins only\" on public.diamond_spin_cache;\n\
+        create policy \"Fresh stock spins only\" on public.diamond_spin_cache for select to anon,authenticated using(exists(select\
+        \ 1 from public.diamond_catalogue_snapshot s,jsonb_array_elements(s.payload) x where s.expires_at>now() and x->>'ref'=diamond_spin_cache.ref));notify\
+        \ pgrst,'reload schema';''')\nbuckets=store('bucket')\nif not any(x['id']=='diamond-spins' for x in buckets):store('bucket','POST',json={'id':'diamond-spins','name':'diamond-spins','public':True,'file_size_limit':1048576,'allowed_mime_types':['image/webp']})\n\
+        old={x['ref']:x for x in sql('select ref from public.diamond_spin_cache')}\nchoices=[]\nfor stone in sorted(live.values(),key=lambda\
+        \ x:-x['discount']):\n row=source.get(stone['ref']);url=row.get('V360','').strip() if row else '';u=urlparse(url)\n\
+        \ if u.scheme=='https' and u.hostname=='images.kpsanghvi.com' and u.path=='/estock/video/'+stone['ref']+'/'+stone['ref']+'.html'\
+        \ and not u.query:choices.append((stone['ref'],url))\nselected=choices[:100];keep={x[0] for x in selected};expired=[x\
+        \ for x in old if x not in keep]\nif expired:\n store('object/diamond-spins','DELETE',json={'prefixes':[x+'.webp'\
+        \ for x in expired]})\n sql('delete from public.diamond_spin_cache where ref in ('+','.join(\"'\"+x+\"'\" for x in\
+        \ expired)+')')\nusage=int(sql(\"select coalesce(sum((metadata->>'size')::bigint),0) as bytes from storage.objects\
+        \ where bucket_id='diamond-spins'\")[0]['bytes'])\nif usage>100*1024*1024:raise RuntimeError('Spin cache cap reached')\n\
+        # Stable subset100,20 fetches/run,one connection,20MB input cap,1MB output cap. Unsupported structure never guesses\
+        \ frame order.\ndone=0;failed=0\nfor stock,url in [x for x in selected if x[0] not in old][:20]:\n try:\n  r=requests.get(url,timeout=60,stream=True,allow_redirects=False);r.raise_for_status();data=bytearray()\n\
+        \  for c in r.iter_content(65536):\n   data.extend(c)\n   if len(data)>20*1024*1024:raise RuntimeError('Oversized\
+        \ viewer')\n  text=data.decode('utf8');meta=json.loads(re.search(r\"var strJSON0='([^']*)'\",text)[1]);key=ORDER_KEY.encode()\n\
+        \  decryptor=Cipher(algorithms.AES(key),modes.CBC(key)).decryptor();raw=decryptor.update(base64.b64decode(meta['scramble']))+decryptor.finalize();pad=PKCS7(128).unpadder();order=json.loads(pad.update(raw)+pad.finalize())\n\
+        \  frames=[]\n  for i in range(1,6):\n   values=json.loads(re.search(r\"var strJSON\"+str(i)+r\"='([^']*)'\",text)[1]);mapping=list(map(str,order[i-1]));n=len(values)\n\
+        \   if n!=len(mapping) or sorted(map(int,mapping))!=list(range(n)):raise RuntimeError('Invalid frame map')\n   images=[values[mapping.index(str(x))]\
+        \ for x in range(n)]\n   if i==1:frames=images\n   else:\n    for x,v in enumerate(images):frames.insert(2*x+1,v)\n\
+        \  # Five levels yield64 native-ordered frames. Keep every other frame for32-angle lightweight playback.\n  if len(frames)!=64:raise\
+        \ RuntimeError('Unexpected frame count')\n  ims=[]\n  for f in frames[::2]:\n   im=Image.open(io.BytesIO(base64.b64decode(f))).convert('RGB');im.thumbnail((360,360));ims.append(im)\n\
+        \  width,height=ims[0].size\n  if any(im.size!=(width,height) for im in ims):raise RuntimeError('Mixed frame sizes')\n\
+        \  atlas=Image.new('RGB',(width*8,height*4),'white')\n  for i,im in enumerate(ims):atlas.paste(im,((i%8)*width,(i//8)*height))\n\
+        \  out=io.BytesIO();atlas.save(out,'WEBP',quality=78)\n  if out.tell()>1048576:raise RuntimeError('Oversized spin\
+        \ sprite')\n  store('object/diamond-spins/'+stock+'.webp','POST',data=out.getvalue(),headers={'Content-Type':'image/webp','x-upsert':'true','cache-control':'3600'})\n\
+        \  sprite=base+'/storage/v1/object/public/diamond-spins/'+stock+'.webp'\n  sql(\"insert into public.diamond_spin_cache(ref,sprite,width,height,frames)\
+        \ values('%s','%s',%d,%d,32) on conflict(ref) do update set sprite=excluded.sprite,width=excluded.width,height=excluded.height,frames=32,updated_at=now()\"\
+        %(stock,sprite,width,height));done+=1\n except Exception:failed+=1\nprint('Spin batch:',json.dumps({'subset':len(selected),'added':done,'unsupported':failed,'removed':len(expired)}),flush=True)\n\
+        print('Spin total:',json.dumps(sql('select count(*) as spins from public.diamond_spin_cache')),flush=True)\n\nPY"
