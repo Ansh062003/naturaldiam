@@ -1,7 +1,7 @@
 
 // Stock data (loaded from his Stock list sheet, 5 Oct 2026, re-read 1:17pm). If sheetCsvUrl is set, the sheet replaces this.
 // video: mp4 / YouTube / Vimeo / Google Drive link, or "".
-window.SITE = { showPrices: true, name: "Natural Diam", tagline: "Certified rubies and sapphires", currency: "USD", contact: "info@naturaldiam.it", sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQqsXwWdGAjfU6vE7A3Zn__RRmWZ2sxyOpYIG3n-pLhfrBR1-v3YBBoP7kEkKi11ew4yi3s2GWjkFqR/pub?output=csv" };
+window.SITE = { supabaseUrl: "https://eigdjzygkqyslwpcaotp.supabase.co", supabaseKey: "sb_publishable_OjReDIKLqvD-vhuEW5vMQg_Gc3ligt6", showPrices: true, name: "Natural Diam", tagline: "Certified rubies and sapphires", currency: "USD", contact: "info@naturaldiam.it", sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQqsXwWdGAjfU6vE7A3Zn__RRmWZ2sxyOpYIG3n-pLhfrBR1-v3YBBoP7kEkKi11ew4yi3s2GWjkFqR/pub?output=csv" };
 window.STONES = [
  {
   "id": "#1",
