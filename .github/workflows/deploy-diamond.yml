@@ -1,6 +1,4 @@
 name: Deploy diamond inventory backend
-true:
-  workflow_dispatch: null
 permissions:
   contents: read
 jobs:
@@ -72,3 +70,5 @@ jobs:
         expired=sql(\"begin; update public.diamond_catalogue_snapshot set expires_at=now()-interval '1 minute' where id=1;\
         \ set local role anon; select count(*) as expired_rows from public.diamond_catalogue_snapshot; rollback;\")\nprint('Expired\
         \ anonymous access check:',json.dumps(expired),flush=True)\nprint('Deployment done',flush=True)\nPY\n"
+'on':
+  workflow_dispatch: null
