@@ -4,6 +4,7 @@ var LANGS=['en','it','fr','es','de'],NAMES={en:'EN',it:'IT',fr:'FR',es:'ES',de:'
 var D={
 "Menu":["Menu","Menu","Menú","Menü"],
 "Home":["Home","Accueil","Inicio","Start"],
+"Diamond offerings":["Offerta diamanti","Offre diamants","Oferta de diamantes","Diamantenangebot"],
 "Diamonds":["Diamanti","Diamants","Diamantes","Diamanten"],
 "Rubies & Sapphires":["Rubini e Zaffiri","Rubis et Saphirs","Rubíes y Zafiros","Rubine & Saphire"],
 "Contact":["Contatti","Contact","Contacto","Kontakt"],
