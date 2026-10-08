@@ -41,7 +41,7 @@ jobs:
         buckets=store('bucket')\nif not any(b['id']=='diamond-photos' for b in buckets):store('bucket','POST',json={'id':'diamond-photos','name':'diamond-photos','public':True,'file_size_limit':65536,'allowed_mime_types':['image/webp']})\n\
         # Fixed authenticated source, never an arbitrary-URL proxy.\nreceipt=requests.get('https://kps.diamonds:8443/estock/apistock',params={'user':os.environ['KPS_API_USER']},timeout=60).json()\n\
         u=urlparse(receipt.get('fileUrl',''))\nif receipt.get('status')!='ok' or u.scheme!='https' or u.hostname!='kps.diamonds':raise\
-        \ RuntimeError('Invalid stock receipt')\nr=requests.get(u.geturl(),timeout=90);r.raise_for_status();rows=list(csv.DictReader(io.StringIO(r.content.decode('utf-8-sig'))))\n\
+        \ RuntimeError('Invalid stock receipt')\nr=requests.get(u.geturl(),timeout=90);r.raise_for_status();rows=list(csv.DictReader(io.StringIO(r.content.decode('utf-8-sig',errors='replace'))))\n\
         snap=sql('select payload,expires_at>now() as fresh from public.diamond_catalogue_snapshot where id=1')[0]\nif not\
         \ snap['fresh']:raise RuntimeError('Stock snapshot expired')\nlive={s['ref']:s for s in snap['payload']};source={r['STOCKID'].strip():r\
         \ for r in rows if r['STATUS'].strip()=='PROMOTION'}\n# Never delete based on a failed, empty or suspiciously different\
