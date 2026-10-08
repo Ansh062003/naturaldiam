@@ -5,6 +5,7 @@ var D={
 "Menu":["Menu","Menu","Menú","Menü"],
 "Home":["Home","Accueil","Inicio","Start"],
 "Diamond offerings":["Offerta diamanti","Offre diamants","Oferta de diamantes","Diamantenangebot"],
+"Browse Diamond Inventory":["Sfoglia l'inventario diamanti","Parcourir l'inventaire de diamants","Ver inventario de diamantes","Diamantenbestand ansehen"],
 "Diamonds":["Diamanti","Diamants","Diamantes","Diamanten"],
 "Rubies & Sapphires":["Rubini e Zaffiri","Rubis et Saphirs","Rubíes y Zafiros","Rubine & Saphire"],
 "Contact":["Contatti","Contact","Contacto","Kontakt"],
