@@ -19,7 +19,7 @@
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
 .card{background:#fff;border:1px solid #e3ded4;padding:14px}.card h3{margin:0;font:400 20px Marcellus,serif;display:flex;justify-content:space-between}.card small{color:#888;letter-spacing:.1em;font-size:10px}
 .sp{margin:8px 0;color:#555;font-size:12px}.q{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-size:11px;margin:8px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;padding:6px 0}
-.pr{font-weight:600}.pg{display:flex;gap:10px;justify-content:center;margin:18px;align-items:center}.pg button{padding:8px 14px}
+.pr{font-weight:600}.ph2{height:170px;margin:-14px -14px 10px;background:#f2efe8;display:flex;align-items:center;justify-content:center;color:#a98a46;font:400 12px Montserrat;letter-spacing:.14em;text-transform:uppercase;overflow:hidden}.ph2 img{width:100%;height:100%;object-fit:cover}.pg{display:flex;gap:10px;justify-content:center;margin:18px;align-items:center}.pg button{padding:8px 14px}
 
 </style></head><body>
 <div class="bar"><span>Natural Diam</span><span>Diamonds</span></div>
@@ -32,7 +32,7 @@
 <div class="grid" id="grid"></div><div class="pg"><button id="prev">Previous</button><span id="pn"></span><button id="next">Next</button></div></main></div>
 <script>
 var URL_='https://eigdjzygkqyslwpcaotp.supabase.co/rest/v1/diamond_catalogue_snapshot?select=payload&id=eq.1',KEY='sb_publishable_OjReDIKLqvD-vhuEW5vMQg_Gc3ligt6';
-var D=[],F={},page=1,tab='m',draft={};
+var PH={},D=[],F={},page=1,tab='m',draft={};
 var SH=['Round','Oval','Pear','Emerald','Cushion','Princess','Marquise','Radiant'],COL='DEFGHIJKLM'.split(''),CL=['IF','VVS1','VVS2','VS1','VS2','SI1','SI2','I1'],GR=['EX','VG','GD'],FL=['NONE','FNT','SL','MED','STG','VST','VSL'],LAB=['GIA','IGI','HRD','IIDGR'];
 function parse(m){var r=/([\d.]+)\s*-\s*([\d.]+)\s*X\s*([\d.]+)/i.exec(m||'');if(!r)return{};var l=+r[1],w=+r[2],d=+r[3];return{L:Math.max(l,w),W:Math.min(l,w),Dp:d,ratio:Math.max(l,w)/Math.min(l,w),depth:d/((l+w)/2)*100}}
 function init(){draft={shape:[],color:[],clarity:[],cut:[],polish:[],symmetry:[],fl:[],lab:[]};F=JSON.parse(JSON.stringify(draft));draw()}
@@ -65,7 +65,7 @@ var per=24,pg=Math.max(1,Math.ceil(a.length/per));if(page>pg)page=pg;
 document.getElementById('count').textContent=a.length.toLocaleString()+' of '+D.length.toLocaleString()+' stones';
 nf();document.getElementById('pn').textContent='Page '+page+' of '+pg;
 document.getElementById('grid').innerHTML=a.slice((page-1)*per,page*per).map(function(x){var pr=x.discount>60?'<span class="pr">-'+x.discount+'% Rap &middot; $'+Math.round(x.perCt).toLocaleString()+'/ct</span>':'<span class="pr">Price on request</span>';
-return '<div class="card"><small>'+x.ref+'</small><h3>'+x.shape+'<span>'+x.carat.toFixed(2)+' ct</span></h3><div class="sp">'+x.color+' &middot; '+x.clarity+' &middot; '+x.lab+'</div><div class="q"><div><small>CUT</small><br>'+x.cut+'</div><div><small>POL</small><br>'+x.polish+'</div><div><small>SYM</small><br>'+x.symmetry+'</div><div><small>FLU</small><br>'+x.fluorescence+'</div></div><div class="sp">'+x.measure+' mm</div>'+pr+'</div>'}).join('')}
+var im=PH[x.ref]?'<img loading="lazy" src="'+PH[x.ref]+'" alt="'+x.shape+' '+x.carat.toFixed(2)+' ct">':x.shape;return '<div class="card"><div class="ph2">'+im+'</div><small>'+x.ref+'</small><h3>'+x.shape+'<span>'+x.carat.toFixed(2)+' ct</span></h3><div class="sp">'+x.color+' &middot; '+x.clarity+' &middot; '+x.lab+'</div><div class="q"><div><small>CUT</small><br>'+x.cut+'</div><div><small>POL</small><br>'+x.polish+'</div><div><small>SYM</small><br>'+x.symmetry+'</div><div><small>FLU</small><br>'+x.fluorescence+'</div></div><div class="sp">'+x.measure+' mm</div>'+pr+'</div>'}).join('')}
 document.addEventListener('click',function(e){var t=e.target;
 if(t.dataset.t){tab=t.dataset.t;document.querySelectorAll('.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.t==tab)});draw()}
 else if(t.dataset.k){var a=draft[t.dataset.k],i=a.indexOf(t.dataset.v);i<0?a.push(t.dataset.v):a.splice(i,1);draw()}
@@ -79,5 +79,7 @@ function tp(o){document.getElementById('panel').classList.toggle('open',o);docum
 function nf(){var n=0;for(var k in F){var v=F[k];if(Array.isArray(v)){if(v.length)n++}else if(v!==''&&v!=null&&!/^(carat|disc|perCt|L|W|Dp|ratio|depth)(min|max)$/.test(k)||(v&&/(min|max)$/.test(k)))n++}var e=document.getElementById('nf');e.textContent=n;e.style.display=n?'':'none'}
 function syncR(){document.querySelectorAll('[data-r]').forEach(function(i){draft[i.dataset.r]=i.value})}
 document.getElementById('sort').onchange=show;
+function ph(o){return fetch('https://eigdjzygkqyslwpcaotp.supabase.co/rest/v1/diamond_photo_cache?select=ref,photo&order=ref&limit=1000&offset='+o,{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){a.forEach(function(p){PH[p.ref]=p.photo});return a.length==1000?ph(o+1000):0}).catch(function(){})}
+ph(0).then(function(){if(D.length)show()});
 fetch(URL_,{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(j){D=j[0].payload.map(function(x){x._m=parse(x.measure);return x});init();show()});
 </script></body></html>
