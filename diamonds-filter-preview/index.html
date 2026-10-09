@@ -4,8 +4,8 @@
 *{box-sizing:border-box}body{margin:0;font:400 13px Montserrat,sans-serif;color:#222;background:#f6f4f0}
 .bar{background:#000;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;letter-spacing:.2em;font-size:12px;text-transform:uppercase}
 .note{background:#c7ac7f;color:#111;padding:8px 24px;font-size:12px}
-.wrap{display:grid;grid-template-columns:360px 1fr;gap:24px;max-width:1400px;margin:20px auto;padding:0 16px}
-.panel{background:#fff;border:1px solid #e3ded4;align-self:start;position:sticky;top:10px;max-height:calc(100vh - 20px);display:flex;flex-direction:column}
+.wrap{display:block;max-width:1400px;margin:20px auto;padding:0 16px}
+.panel{background:#fff;position:fixed;left:0;top:0;bottom:0;width:380px;max-width:92vw;z-index:30;display:flex;flex-direction:column;transform:translateX(-102%);transition:transform .25s;box-shadow:4px 0 24px rgba(0,0,0,.2)}.panel.open{transform:none}.bk{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:25;display:none}.bk.open{display:block}.fb{padding:11px 20px;background:#000;color:#fff;border:0;font:600 12px Montserrat;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}.fb i{font-style:normal;background:#c7ac7f;color:#111;border-radius:10px;padding:1px 7px;margin-left:8px}.x{float:right;cursor:pointer;font-size:18px;letter-spacing:0}
 .ph{padding:14px 18px;border-bottom:1px solid #eee;font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px}
 .tabs{display:flex;border-bottom:1px solid #eee}.tabs button{flex:1;padding:12px;border:0;background:none;font:500 12px Montserrat;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:#888;border-bottom:2px solid transparent}.tabs button.on{color:#000;border-color:#a98a46}
 .body{overflow:auto;padding:6px 18px 12px;flex:1}.sec{padding:14px 0;border-bottom:1px solid #f0ece4}.sec h4{margin:0 0 10px;font:600 11px Montserrat;letter-spacing:.14em;text-transform:uppercase}
@@ -20,15 +20,15 @@
 .card{background:#fff;border:1px solid #e3ded4;padding:14px}.card h3{margin:0;font:400 20px Marcellus,serif;display:flex;justify-content:space-between}.card small{color:#888;letter-spacing:.1em;font-size:10px}
 .sp{margin:8px 0;color:#555;font-size:12px}.q{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-size:11px;margin:8px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;padding:6px 0}
 .pr{font-weight:600}.pg{display:flex;gap:10px;justify-content:center;margin:18px;align-items:center}.pg button{padding:8px 14px}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}.panel{position:static;max-height:none}}
+
 </style></head><body>
 <div class="bar"><span>Natural Diam</span><span>Diamonds</span></div>
 <div class="note">SAMPLE / PREVIEW of a Nivoda-style filter panel. Not the live page. Uses the real live stock feed.</div>
-<div class="wrap"><aside class="panel"><div class="ph">Filters</div>
+<div class="wrap"><div class="bk" id="bk"></div><aside class="panel" id="panel"><div class="ph">Filters<span class="x" id="close">&times;</span></div>
 <div class="tabs"><button class="on" data-t="m">Main</button><button data-t="a">Advanced</button></div>
 <div class="body" id="body"></div>
 <div class="foot"><button class="reset" id="reset">Reset</button><button class="apply" id="apply">Apply filters</button></div></aside>
-<main><div class="hd"><b id="count"></b><select id="sort"><option value="d">Discount high to low</option><option value="ca">Carat low to high</option><option value="cd">Carat high to low</option></select></div>
+<main><div class="hd"><button class="fb" id="open">Filters<i id="nf" style="display:none"></i></button><b id="count"></b><select id="sort"><option value="d">Discount high to low</option><option value="ca">Carat low to high</option><option value="cd">Carat high to low</option></select></div>
 <div class="grid" id="grid"></div><div class="pg"><button id="prev">Previous</button><span id="pn"></span><button id="next">Next</button></div></main></div>
 <script>
 var URL_='https://eigdjzygkqyslwpcaotp.supabase.co/rest/v1/diamond_catalogue_snapshot?select=payload&id=eq.1',KEY='sb_publishable_OjReDIKLqvD-vhuEW5vMQg_Gc3ligt6';
@@ -63,7 +63,7 @@ return r('carat',x.carat)&&r('disc',x.discount)&&r('perCt',x.perCt)&&r('L',m.L)&
 function show(){var s=document.getElementById('sort').value,a=D.filter(pass);a.sort(function(p,q){return s=='d'?q.discount-p.discount:s=='ca'?p.carat-q.carat:q.carat-p.carat});
 var per=24,pg=Math.max(1,Math.ceil(a.length/per));if(page>pg)page=pg;
 document.getElementById('count').textContent=a.length.toLocaleString()+' of '+D.length.toLocaleString()+' stones';
-document.getElementById('pn').textContent='Page '+page+' of '+pg;
+nf();document.getElementById('pn').textContent='Page '+page+' of '+pg;
 document.getElementById('grid').innerHTML=a.slice((page-1)*per,page*per).map(function(x){var pr=x.discount>60?'<span class="pr">-'+x.discount+'% Rap &middot; $'+Math.round(x.perCt).toLocaleString()+'/ct</span>':'<span class="pr">Price on request</span>';
 return '<div class="card"><small>'+x.ref+'</small><h3>'+x.shape+'<span>'+x.carat.toFixed(2)+' ct</span></h3><div class="sp">'+x.color+' &middot; '+x.clarity+' &middot; '+x.lab+'</div><div class="q"><div><small>CUT</small><br>'+x.cut+'</div><div><small>POL</small><br>'+x.polish+'</div><div><small>SYM</small><br>'+x.symmetry+'</div><div><small>FLU</small><br>'+x.fluorescence+'</div></div><div class="sp">'+x.measure+' mm</div>'+pr+'</div>'}).join('')}
 document.addEventListener('click',function(e){var t=e.target;
@@ -71,9 +71,12 @@ if(t.dataset.t){tab=t.dataset.t;document.querySelectorAll('.tabs button').forEac
 else if(t.dataset.k){var a=draft[t.dataset.k],i=a.indexOf(t.dataset.v);i<0?a.push(t.dataset.v):a.splice(i,1);draw()}
 else if(t.dataset.q){var p=t.dataset.q.split('-');draft.caratmin=p[0];draft.caratmax=p[1]=='9'?'':p[1];draw()}
 else if(t.dataset.p){var v=t.dataset.p;draft.cut=v=='3VG'?['EX','VG']:['EX'];draft.polish=draft.cut.slice();draft.symmetry=draft.cut.slice();if(v=='EXC'){draft.polish=[];draft.symmetry=[]}draw()}
-else if(t.id=='apply'){syncR();F=JSON.parse(JSON.stringify(draft));page=1;show()}
+else if(t.id=='open'){tp(true)}else if(t.id=='close'||t.id=='bk'){tp(false)}
+else if(t.id=='apply'){syncR();F=JSON.parse(JSON.stringify(draft));page=1;show();tp(false)}
 else if(t.id=='reset'){init();show()}
 else if(t.id=='prev'){page=Math.max(1,page-1);show()}else if(t.id=='next'){page++;show()}});
+function tp(o){document.getElementById('panel').classList.toggle('open',o);document.getElementById('bk').classList.toggle('open',o)}
+function nf(){var n=0;for(var k in F){var v=F[k];if(Array.isArray(v)){if(v.length)n++}else if(v!==''&&v!=null&&!/^(carat|disc|perCt|L|W|Dp|ratio|depth)(min|max)$/.test(k)||(v&&/(min|max)$/.test(k)))n++}var e=document.getElementById('nf');e.textContent=n;e.style.display=n?'':'none'}
 function syncR(){document.querySelectorAll('[data-r]').forEach(function(i){draft[i.dataset.r]=i.value})}
 document.getElementById('sort').onchange=show;
 fetch(URL_,{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(j){D=j[0].payload.map(function(x){x._m=parse(x.measure);return x});init();show()});
