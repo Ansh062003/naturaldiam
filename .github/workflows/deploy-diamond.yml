@@ -43,7 +43,7 @@ jobs:
         n if(![carat,rap,disc,sourcePrice,sourceTotal].every(Number.isFinite)||carat<=0||rap<=0||disc>0||disc< -100||Math.abs(sourcePrice*carat-sourceTotal)>.02||Math.abs(rap*(1+disc/100)-sourcePrice)>.02)throw\
         \ Error(\\'Invalid numeric data\\');\\n const discount=-(disc+7),perCt=rap*(1+(disc+7)/100),total=perCt*carat;\\n\
         \ stones.push({id:stones.length+1,ref,shape:shapes[r.SHAPE]||r.SHAPE,carat,color:r.COLOR,clarity:r.CLARITY,cut:r.CUT||\\\
-        '-\\',lab:r.CERT,measure:r.MEASUREMENT,polish:r.POL,symmetry:r.SYM,fluorescence:r.FLUOR,discount,perCt:Number(perCt.toFixed(2)),total:Number(total.toFixed(2))});}\\\
+        '-\\',lab:r.CERT,measure:r.MEASUREMENT,polish:r.POL,symmetry:r.SYM,fluorescence:r.FLUOR,discount,perCt:discount>60?Number(perCt.toFixed(2)):null,total:discount>60?Number(total.toFixed(2)):null});}\\\
         n if(!stones.length)throw Error(\\'No available records\\');\\n const fetched=new Date(),expires=new Date(fetched.getTime()+2*60*60*1000);\\\
         n const base=Deno.env.get(\\'SUPABASE_URL\\')!;\\n stage=\"save_snapshot\";await checked(base+\\'/rest/v1/diamond_catalogue_snapshot?on_conflict=id\\\
         ',{method:\\'POST\\',headers:{apikey:serviceKey,Authorization:`Bearer ${serviceKey}`,\\'Content-Type\\':\\'application/json\\\
