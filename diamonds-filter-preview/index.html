@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Filter preview | Natural Diam</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font:400 13px Montserrat,sans-serif;color:#222;background:#f6f4f0}
+.bar{background:#000;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;letter-spacing:.2em;font-size:12px;text-transform:uppercase}
+.note{background:#c7ac7f;color:#111;padding:8px 24px;font-size:12px}
+.wrap{display:grid;grid-template-columns:360px 1fr;gap:24px;max-width:1400px;margin:20px auto;padding:0 16px}
+.panel{background:#fff;border:1px solid #e3ded4;align-self:start;position:sticky;top:10px;max-height:calc(100vh - 20px);display:flex;flex-direction:column}
+.ph{padding:14px 18px;border-bottom:1px solid #eee;font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+.tabs{display:flex;border-bottom:1px solid #eee}.tabs button{flex:1;padding:12px;border:0;background:none;font:500 12px Montserrat;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:#888;border-bottom:2px solid transparent}.tabs button.on{color:#000;border-color:#a98a46}
+.body{overflow:auto;padding:6px 18px 12px;flex:1}.sec{padding:14px 0;border-bottom:1px solid #f0ece4}.sec h4{margin:0 0 10px;font:600 11px Montserrat;letter-spacing:.14em;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid #cfc8ba;background:#fff;padding:7px 10px;font:500 11px Montserrat;cursor:pointer}.chip.on{background:#000;color:#fff;border-color:#000}
+.shapes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.shapes .chip{text-align:center;padding:10px 2px}
+.row2{display:flex;gap:8px;align-items:center}.row2 input{width:100%;padding:8px;border:1px solid #cfc8ba;font:12px Montserrat}
+.dis{opacity:.5}.dis .tag{font-size:10px;color:#a33;margin-left:6px;text-transform:none;letter-spacing:0}
+.foot{display:flex;gap:8px;padding:12px 18px;border-top:1px solid #eee}.foot button{flex:1;padding:12px;font:600 12px Montserrat;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:1px solid #000}
+.apply{background:#c7ac7f;border-color:#c7ac7f!important}.reset{background:#fff}
+.hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.hd select{padding:8px;font:12px Montserrat}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.card{background:#fff;border:1px solid #e3ded4;padding:14px}.card h3{margin:0;font:400 20px Marcellus,serif;display:flex;justify-content:space-between}.card small{color:#888;letter-spacing:.1em;font-size:10px}
+.sp{margin:8px 0;color:#555;font-size:12px}.q{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-size:11px;margin:8px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;padding:6px 0}
+.pr{font-weight:600}.pg{display:flex;gap:10px;justify-content:center;margin:18px;align-items:center}.pg button{padding:8px 14px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.panel{position:static;max-height:none}}
+</style></head><body>
+<div class="bar"><span>Natural Diam</span><span>Diamonds</span></div>
+<div class="note">SAMPLE / PREVIEW of a Nivoda-style filter panel. Not the live page. Uses the real live stock feed.</div>
+<div class="wrap"><aside class="panel"><div class="ph">Filters</div>
+<div class="tabs"><button class="on" data-t="m">Main</button><button data-t="a">Advanced</button></div>
+<div class="body" id="body"></div>
+<div class="foot"><button class="reset" id="reset">Reset</button><button class="apply" id="apply">Apply filters</button></div></aside>
+<main><div class="hd"><b id="count"></b><select id="sort"><option value="d">Discount high to low</option><option value="ca">Carat low to high</option><option value="cd">Carat high to low</option></select></div>
+<div class="grid" id="grid"></div><div class="pg"><button id="prev">Previous</button><span id="pn"></span><button id="next">Next</button></div></main></div>
+<script>
+var URL_='https://eigdjzygkqyslwpcaotp.supabase.co/rest/v1/diamond_catalogue_snapshot?select=payload&id=eq.1',KEY='sb_publishable_OjReDIKLqvD-vhuEW5vMQg_Gc3ligt6';
+var D=[],F={},page=1,tab='m',draft={};
+var SH=['Round','Oval','Pear','Emerald','Cushion','Princess','Marquise','Radiant'],COL='DEFGHIJKLM'.split(''),CL=['IF','VVS1','VVS2','VS1','VS2','SI1','SI2','I1'],GR=['EX','VG','GD'],FL=['NONE','FNT','SL','MED','STG','VST','VSL'],LAB=['GIA','IGI','HRD','IIDGR'];
+function parse(m){var r=/([\d.]+)\s*-\s*([\d.]+)\s*X\s*([\d.]+)/i.exec(m||'');if(!r)return{};var l=+r[1],w=+r[2],d=+r[3];return{L:Math.max(l,w),W:Math.min(l,w),Dp:d,ratio:Math.max(l,w)/Math.min(l,w),depth:d/((l+w)/2)*100}}
+function init(){draft={shape:[],color:[],clarity:[],cut:[],polish:[],symmetry:[],fl:[],lab:[]};F=JSON.parse(JSON.stringify(draft));draw()}
+function chips(k,arr,lab){return '<div class="chips">'+arr.map(function(v){return '<span class="chip'+(draft[k].indexOf(v)>=0?' on':'')+'" data-k="'+k+'" data-v="'+v+'">'+(lab?lab(v):v)+'</span>'}).join('')+'</div>'}
+function rng(k,a,b,u){return '<div class="row2"><input placeholder="Min'+(u?' '+u:'')+'" data-r="'+k+'min" value="'+(draft[k+'min']||'')+'"><span>-</span><input placeholder="Max'+(u?' '+u:'')+'" data-r="'+k+'max" value="'+(draft[k+'max']||'')+'"></div>'}
+function dis(t,why){return '<div class="sec dis"><h4>'+t+'<span class="tag">'+why+'</span></h4></div>'}
+function draw(){var h='';
+if(tab=='m'){
+h+='<div class="sec"><h4>Shape</h4><div class="shapes">'+SH.map(function(v){return '<span class="chip'+(draft.shape.indexOf(v)>=0?' on':'')+'" data-k="shape" data-v="'+v+'">'+v+'</span>'}).join('')+'</div></div>';
+h+='<div class="sec"><h4>Carat</h4>'+rng('carat')+'<div class="chips" style="margin-top:8px">'+[['0.3-0.49','0.30-0.49'],['0.5-0.99','0.50-0.99'],['1-1.99','1.00-1.99'],['2-2.99','2.00-2.99'],['3-9','3.00+']].map(function(x){return '<span class="chip" data-q="'+x[0]+'">'+x[1]+'</span>'}).join('')+'</div></div>';
+h+='<div class="sec"><h4>Colour (white)</h4>'+chips('color',COL)+'</div>';
+h+='<div class="sec"><h4>Clarity</h4>'+chips('clarity',CL)+'</div>';
+h+='<div class="sec"><h4>Cut / Polish / Symmetry</h4><div class="chips" style="margin-bottom:8px"><span class="chip" data-p="3EX">3EX</span><span class="chip" data-p="EXC">EX cut+</span><span class="chip" data-p="3VG">3VG+</span></div><small>Cut</small>'+chips('cut',GR)+'<small>Polish</small>'+chips('polish',GR)+'<small>Symmetry</small>'+chips('symmetry',GR)+'</div>';
+h+='<div class="sec"><h4>Fluorescence</h4>'+chips('fl',FL)+'</div>';
+h+='<div class="sec"><h4>Lab</h4>'+chips('lab',LAB)+'</div>';
+h+='<div class="sec"><h4>Rap discount (%)</h4>'+rng('disc',0,0,'%')+'</div><div class="sec"><h4>Price per ct (USD)</h4>'+rng('perCt',0,0,'$')+'<small>Only stones over 60% off rap show a price (94 stones). Setting this hides the others.</small></div>';
+
+}else{
+h+='<div class="sec"><h4>Parameters (mm)</h4><small>Length</small>'+rng('L')+'<small>Width</small>'+rng('W')+'<small>Depth</small>'+rng('Dp')+'</div>';
+h+='<div class="sec"><h4>L/W ratio</h4>'+rng('ratio')+'</div><div class="sec"><h4>Depth % (estimated)</h4>'+rng('depth')+'</div>';
+
+}
+var b=document.getElementById('body'),s=b.scrollTop;b.innerHTML=h;b.scrollTop=s}
+function pass(x){var f=F;function inl(k,v){return !f[k].length||f[k].indexOf(v)>=0}
+if(!inl('shape',x.shape)||!inl('color',x.color)||!inl('clarity',x.clarity)||!inl('cut',x.cut)||!inl('polish',x.polish)||!inl('symmetry',x.symmetry)||!inl('fl',x.fluorescence)||!inl('lab',x.lab))return false;
+var m=x._m;function r(k,v){var a=parseFloat(f[k+'min']),b=parseFloat(f[k+'max']);if(!isNaN(a)&&(v==null||v<a))return false;if(!isNaN(b)&&(v==null||v>b))return false;return true}
+return r('carat',x.carat)&&r('disc',x.discount)&&r('perCt',x.perCt)&&r('L',m.L)&&r('W',m.W)&&r('Dp',m.Dp)&&r('ratio',m.ratio)&&r('depth',m.depth)}
+function show(){var s=document.getElementById('sort').value,a=D.filter(pass);a.sort(function(p,q){return s=='d'?q.discount-p.discount:s=='ca'?p.carat-q.carat:q.carat-p.carat});
+var per=24,pg=Math.max(1,Math.ceil(a.length/per));if(page>pg)page=pg;
+document.getElementById('count').textContent=a.length.toLocaleString()+' of '+D.length.toLocaleString()+' stones';
+document.getElementById('pn').textContent='Page '+page+' of '+pg;
+document.getElementById('grid').innerHTML=a.slice((page-1)*per,page*per).map(function(x){var pr=x.discount>60?'<span class="pr">-'+x.discount+'% Rap &middot; $'+Math.round(x.perCt).toLocaleString()+'/ct</span>':'<span class="pr">Price on request</span>';
+return '<div class="card"><small>'+x.ref+'</small><h3>'+x.shape+'<span>'+x.carat.toFixed(2)+' ct</span></h3><div class="sp">'+x.color+' &middot; '+x.clarity+' &middot; '+x.lab+'</div><div class="q"><div><small>CUT</small><br>'+x.cut+'</div><div><small>POL</small><br>'+x.polish+'</div><div><small>SYM</small><br>'+x.symmetry+'</div><div><small>FLU</small><br>'+x.fluorescence+'</div></div><div class="sp">'+x.measure+' mm</div>'+pr+'</div>'}).join('')}
+document.addEventListener('click',function(e){var t=e.target;
+if(t.dataset.t){tab=t.dataset.t;document.querySelectorAll('.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.t==tab)});draw()}
+else if(t.dataset.k){var a=draft[t.dataset.k],i=a.indexOf(t.dataset.v);i<0?a.push(t.dataset.v):a.splice(i,1);draw()}
+else if(t.dataset.q){var p=t.dataset.q.split('-');draft.caratmin=p[0];draft.caratmax=p[1]=='9'?'':p[1];draw()}
+else if(t.dataset.p){var v=t.dataset.p;draft.cut=v=='3VG'?['EX','VG']:['EX'];draft.polish=draft.cut.slice();draft.symmetry=draft.cut.slice();if(v=='EXC'){draft.polish=[];draft.symmetry=[]}draw()}
+else if(t.id=='apply'){syncR();F=JSON.parse(JSON.stringify(draft));page=1;show()}
+else if(t.id=='reset'){init();show()}
+else if(t.id=='prev'){page=Math.max(1,page-1);show()}else if(t.id=='next'){page++;show()}});
+function syncR(){document.querySelectorAll('[data-r]').forEach(function(i){draft[i.dataset.r]=i.value})}
+document.getElementById('sort').onchange=show;
+fetch(URL_,{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(j){D=j[0].payload.map(function(x){x._m=parse(x.measure);return x});init();show()});
+</script></body></html>
