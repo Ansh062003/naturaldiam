@@ -1,0 +1,23 @@
+name: Refresh extra diamond feed
+'on':
+  workflow_dispatch: {}
+  schedule:
+  - cron: 41 * * * *
+permissions:
+  contents: read
+concurrency:
+  group: extra-diamond-feed
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install tools
+      run: python3 -m pip install requests Pillow
+    - name: Refresh extra feed and photo cache
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        FEED2_URL: ${{ secrets.FEED2_URL }}
+      run: python3 .github/feed2.py
