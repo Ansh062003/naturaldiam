@@ -1,5 +1,4 @@
 
-
 (function () {
   var S = window.STONES || [], C = window.SITE || {};
   var N = {stockno:'id',id:'id',stone:'type',type:'type',carat:'carat',weight:'carat',treatment:'heat',heat:'heat',shape:'shape',origin:'origin',certificate:'certificate',colour:'color',color:'color',dimensions:'dimensions',priceperct:'pricePerCarat',pricepercarat:'pricePerCarat',video:'video',status:'status',srno:'id',stonename:'type',certcolour:'color',certcolor:'color',sizelwxdmm:'dimensions',sizelxwxdmm:'dimensions',weightcts:'carat',size:'dimensions',stocknumero:'id',measurement:'dimensions',alct:'pricePerCarat'};
@@ -36,7 +35,7 @@
     if (m) return '<div class="vid"><iframe loading="lazy" src="https://player.vimeo.com/video/' + m[1] + '" title="Video ' + esc(id) + '" allowfullscreen></iframe></div>';
     m = u.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
     if (m) return '<div class="vid"><iframe loading="lazy" src="https://drive.google.com/file/d/' + m[1] + '/preview" title="Video ' + esc(id) + '" allowfullscreen></iframe></div>';
-    return '<div class="vid"><video poster="' + esc((window.__poster||{})[u]||'') + '" src="' + esc(u) + '" muted loop playsinline preload="metadata"></video><button class="pbtn" type="button" aria-label="Play video">&#9654;</button></div>';
+    return '<div class="vid"><video poster="' + esc((window.__poster||{})[u]||'') + '" data-src="' + esc(u) + '" muted loop playsinline preload="none"></video><button class="pbtn" type="button" aria-label="Play video">&#9654;</button></div>';
   }
   function total(s) { return s.pricePerCarat * s.carat; }
   function render() {
@@ -61,7 +60,7 @@
   }
   ['type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).addEventListener('input', render); });
   $('reset').addEventListener('click', function () { ['type', 'origin', 'size', 'heat', 'sort'].forEach(function (id) { $(id).value = ''; }); render(); });
-  $('grid').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('.vid') : null; if (!b) return; var v = b.querySelector('video'); if (!v) return; if (v.paused) { v.controls = true; v.play(); b.classList.add('playing'); } else if (e.target === v) { v.pause(); } });
+  $('grid').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('.vid') : null; if (!b) return; var v = b.querySelector('video'); if (!v) return; if (v.paused) { if (!v.src && v.dataset.src) { v.src = v.dataset.src; v.load(); } v.controls = true; v.play(); b.classList.add('playing'); } else if (e.target === v) { v.pause(); } });
   $('grid').addEventListener('error',function(e){var v=e.target;if(v.tagName!=='VIDEO')return;var card=v.closest('.card'),stock=card&&card.getAttribute('data-stock-id');var fallback=stock&&(window.VIDEO_MAP||{})[stock];if(fallback&&!v.dataset.fallback){v.dataset.fallback='1';v.poster=(window.__poster||{})[fallback]||'';v.src=fallback;v.load();}},true);
   render();
   }
@@ -85,7 +84,7 @@
       var base=C.supabaseUrl+'/storage/v1/object/public/videos/';
       var next=d.map(function(o){o.pricePerCarat=Number(o.price_per_carat);o.carat=Number(o.carat);
         o.video=o.video_path?base+o.video_path:'';
-        if(o.video){window.__poster=window.__poster||{};window.__poster[o.video]=o.poster_path?base+o.poster_path:'';}
+        if(o.video){window.__poster=window.__poster||{};var fallbackVideo=(window.VIDEO_MAP||{})[o.id]||'';window.__poster[o.video]=o.poster_path?base+o.poster_path:(fallbackVideo?(window.__poster||{})[fallbackVideo]||'':'');}
         return o;});
       if(next.some(function(o){return !o.id||!(o.carat>0)||!(o.pricePerCarat>0);}))throw Error('Invalid stone');
       next.sort(function(a,b){return parseFloat(a.id.replace('#',''))-parseFloat(b.id.replace('#',''));});
