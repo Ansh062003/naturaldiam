@@ -14,7 +14,20 @@ window.STONES = [
   "dimensions": "12.05 x 9.39 x 3.65",
   "carat": 3.52,
   "pricePerCarat": 1950.0,
-  "video": ""
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v1.mp4"
+ },
+ {
+  "id": "#2",
+  "type": "Ruby",
+  "heat": "No heat",
+  "shape": "Cush./OV",
+  "origin": "Mozambique",
+  "certificate": "Christian Dunaigre",
+  "color": "Pigeon Blood",
+  "dimensions": "9.82 x 7.36 x 4.12",
+  "carat": 3.08,
+  "pricePerCarat": 3200.0,
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v2.mp4"
  },
  {
   "id": "#3",
@@ -27,7 +40,7 @@ window.STONES = [
   "dimensions": "11.60 x 9.12 x 4.15",
   "carat": 4.09,
   "pricePerCarat": 2600.0,
-  "video": ""
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v3.mp4"
  },
  {
   "id": "#4",
@@ -40,6 +53,19 @@ window.STONES = [
   "dimensions": "11.39 x 7.71 x 3.59",
   "carat": 3.02,
   "pricePerCarat": 5100.0,
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v4.mp4"
+ },
+ {
+  "id": "#5",
+  "type": "Ruby",
+  "heat": "Heat",
+  "shape": "Oval",
+  "origin": "Burma",
+  "certificate": "GRS",
+  "color": "Pigeon blood",
+  "dimensions": "",
+  "carat": 3.08,
+  "pricePerCarat": 2250.0,
   "video": ""
  },
  {
@@ -53,7 +79,7 @@ window.STONES = [
   "dimensions": "10.42 x 7.32 x 5.77",
   "carat": 4.01,
   "pricePerCarat": 1150.0,
-  "video": ""
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v6_1.mp4"
  },
  {
   "id": "#6.2",
@@ -66,19 +92,32 @@ window.STONES = [
   "dimensions": "10.22 x 7.09 x 4.53",
   "carat": 3.11,
   "pricePerCarat": 1150.0,
-  "video": ""
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v6_2.mp4"
  },
  {
-  "id": "#8",
+  "id": "#11",
   "type": "Ruby",
   "heat": "Heat",
   "shape": "Oval",
-  "origin": "Burma",
+  "origin": "Mozambique",
   "certificate": "GRS",
-  "color": "Pigeon Blood",
-  "dimensions": "9.90 x 7.79 x 4.51",
-  "carat": 3.04,
-  "pricePerCarat": 1950.0,
+  "color": "Red",
+  "dimensions": "",
+  "carat": 4.15,
+  "pricePerCarat": 1100.0,
+  "video": ""
+ },
+ {
+  "id": "#12",
+  "type": "Ruby",
+  "heat": "Heat",
+  "shape": "Oval",
+  "origin": "Mozambique",
+  "certificate": "GRS",
+  "color": "Red",
+  "dimensions": "",
+  "carat": 5.05,
+  "pricePerCarat": 875.0,
   "video": ""
  },
  {
@@ -108,17 +147,30 @@ window.STONES = [
   "video": ""
  },
  {
-  "id": "#15",
+  "id": "#16",
   "type": "Ruby",
   "heat": "Heat",
   "shape": "Oval",
   "origin": "Mozambique",
   "certificate": "GRS",
-  "color": "Pigeon Blood",
-  "dimensions": "9.87 x 6.90 x 4.46",
-  "carat": 3.02,
-  "pricePerCarat": 3200.0,
+  "color": "Red",
+  "dimensions": "",
+  "carat": 3.0,
+  "pricePerCarat": 3400.0,
   "video": ""
+ },
+ {
+  "id": "#17",
+  "type": "Ruby",
+  "heat": "Heat",
+  "shape": "Oval",
+  "origin": "Mozambique",
+  "certificate": "Christian Dunaigre",
+  "color": "Intense Red",
+  "dimensions": "10.84 x 8.37 x 4.97",
+  "carat": 4.17,
+  "pricePerCarat": 1200.0,
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v17.mp4"
  },
  {
   "id": "#18",
@@ -173,16 +225,42 @@ window.STONES = [
   "video": ""
  },
  {
-  "id": "#24",
+  "id": "#25",
   "type": "Ruby",
   "heat": "No heat",
+  "shape": "Heart",
+  "origin": "Mozambique",
+  "certificate": "GRS",
+  "color": "Vivid Red (Pigeon Blood)",
+  "dimensions": "9.16 x 10.55 x 3.39",
+  "carat": 3.02,
+  "pricePerCarat": 2100.0,
+  "video": ""
+ },
+ {
+  "id": "#26",
+  "type": "Sapphire",
+  "heat": "Heat",
+  "shape": "Oval",
+  "origin": "Mozambique",
+  "certificate": "GRS",
+  "color": "Royal Blue",
+  "dimensions": "10.47 x 9.03 x 6.56",
+  "carat": 4.58,
+  "pricePerCarat": 1200.0,
+  "video": ""
+ },
+ {
+  "id": "#27",
+  "type": "Sapphire",
+  "heat": "Heat",
   "shape": "Cushion",
-  "origin": "N/A",
-  "certificate": "GIT",
-  "color": "RED",
-  "dimensions": "9.10 x 7.16 x 3.33",
-  "carat": 2.1,
-  "pricePerCarat": 1250.0,
+  "origin": "Mozambique",
+  "certificate": "GRS",
+  "color": "Royal Blue",
+  "dimensions": "9.51 x 6.78 x 6.51",
+  "carat": 4.02,
+  "pricePerCarat": 900.0,
   "video": ""
  },
  {
@@ -199,6 +277,32 @@ window.STONES = [
   "video": ""
  },
  {
+  "id": "#29",
+  "type": "Sapphire",
+  "heat": "Heat",
+  "shape": "Oval",
+  "origin": "Mozambique",
+  "certificate": "GRS",
+  "color": "Blue",
+  "dimensions": "10.52 x 7.84 x 6.88",
+  "carat": 4.61,
+  "pricePerCarat": 1350.0,
+  "video": ""
+ },
+ {
+  "id": "#30",
+  "type": "Ruby",
+  "heat": "No heat",
+  "shape": "Octagon",
+  "origin": "Tanzania",
+  "certificate": "GRS",
+  "color": "Vivid Red (Pigeon Blood)",
+  "dimensions": "10.50 x 6.39 x 4.28",
+  "carat": 3.08,
+  "pricePerCarat": 2490.0,
+  "video": ""
+ },
+ {
   "id": "#31",
   "type": "Ruby",
   "heat": "No heat",
@@ -209,6 +313,84 @@ window.STONES = [
   "dimensions": "11.00 X 8.53 X 3.61",
   "carat": 3.01,
   "pricePerCarat": 800.0,
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v31.mp4"
+ },
+ {
+  "id": "#32",
+  "type": "Ruby",
+  "heat": "No heat",
+  "shape": "Cushion",
+  "origin": "Mozambique",
+  "certificate": "GRS",
+  "color": "Vivid Red (Pigeon Blood)",
+  "dimensions": "10.14 x 6.56 x 3.97",
+  "carat": 2.52,
+  "pricePerCarat": 1850.0,
+  "video": ""
+ },
+ {
+  "id": "#34",
+  "type": "Ruby",
+  "heat": "Heat",
+  "shape": "Heart",
+  "origin": "Mozambique",
+  "certificate": "AIGS / CDC",
+  "color": "Pigeon blood",
+  "dimensions": "",
+  "carat": 2.49,
+  "pricePerCarat": 1990.0,
+  "video": ""
+ },
+ {
+  "id": "#38",
+  "type": "Ruby",
+  "heat": "Heat",
+  "shape": "Heart",
+  "origin": "Burma",
+  "certificate": "GRS",
+  "color": "Red",
+  "dimensions": "",
+  "carat": 3.02,
+  "pricePerCarat": 1290.0,
+  "video": ""
+ },
+ {
+  "id": "#40",
+  "type": "Ruby",
+  "heat": "No heat",
+  "shape": "Cushion",
+  "origin": "Mozambique",
+  "certificate": "CDC",
+  "color": "Pigeon blood",
+  "dimensions": "",
+  "carat": 2.03,
+  "pricePerCarat": 1350.0,
+  "video": ""
+ },
+ {
+  "id": "#41",
+  "type": "Ruby",
+  "heat": "No heat",
+  "shape": "Cushion",
+  "origin": "Mozambique",
+  "certificate": "CDC",
+  "color": "Pigeon blood",
+  "dimensions": "",
+  "carat": 2.06,
+  "pricePerCarat": 1450.0,
+  "video": ""
+ },
+ {
+  "id": "#42",
+  "type": "Sapphire",
+  "heat": "Heat",
+  "shape": "Oval",
+  "origin": "Madagascar",
+  "certificate": "CDC",
+  "color": "Blue",
+  "dimensions": "",
+  "carat": 4.2,
+  "pricePerCarat": 950.0,
   "video": ""
  },
  {
@@ -225,6 +407,19 @@ window.STONES = [
   "video": ""
  },
  {
+  "id": "#44",
+  "type": "Ruby",
+  "heat": "No heat",
+  "shape": "Cushion",
+  "origin": "Mozambique",
+  "certificate": "CDC",
+  "color": "Intense red",
+  "dimensions": "",
+  "carat": 6.05,
+  "pricePerCarat": 1450.0,
+  "video": ""
+ },
+ {
   "id": "#45",
   "type": "Sapphire",
   "heat": "Heat",
@@ -235,6 +430,45 @@ window.STONES = [
   "dimensions": "8.93 x 8.44 x 5.18",
   "carat": 3.59,
   "pricePerCarat": 350.0,
+  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v45.mp4"
+ },
+ {
+  "id": "#47",
+  "type": "Ruby",
+  "heat": "Heat",
+  "shape": "Cushion",
+  "origin": "Mozambique",
+  "certificate": "CDC",
+  "color": "Red",
+  "dimensions": "",
+  "carat": 2.03,
+  "pricePerCarat": 1250.0,
+  "video": ""
+ },
+ {
+  "id": "#49",
+  "type": "1ct Burma lot High quality",
+  "heat": "Heat",
+  "shape": "Mix",
+  "origin": "Burma",
+  "certificate": "",
+  "color": "",
+  "dimensions": "",
+  "carat": 29.6,
+  "pricePerCarat": 980.0,
+  "video": ""
+ },
+ {
+  "id": "#50",
+  "type": "1ct Burma lot High quality",
+  "heat": "Heat",
+  "shape": "Mix",
+  "origin": "Burma",
+  "certificate": "",
+  "color": "",
+  "dimensions": "",
+  "carat": 27.38,
+  "pricePerCarat": 695.0,
   "video": ""
  }
 ];
