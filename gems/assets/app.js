@@ -83,8 +83,8 @@
       if(!Array.isArray(d))throw Error('Invalid stock');
       var base=C.supabaseUrl+'/storage/v1/object/public/videos/';
       var next=d.map(function(o){o.pricePerCarat=Number(o.price_per_carat);o.carat=Number(o.carat);
-        o.video=o.video_path?base+o.video_path:'';
-        if(o.video){window.__poster=window.__poster||{};var fallbackVideo=(window.VIDEO_MAP||{})[o.id]||'';window.__poster[o.video]=o.poster_path?base+o.poster_path:(fallbackVideo?(window.__poster||{})[fallbackVideo]||'':'');}
+        o.video=(window.VIDEO_MAP||{})[o.id]||(o.video_path?base+o.video_path:'');
+        if(o.video){window.__poster=window.__poster||{};window.__poster[o.video]=window.__poster[o.video]||(o.poster_path?base+o.poster_path:'');}
         return o;});
       if(next.some(function(o){return !o.id||!(o.carat>0)||!(o.pricePerCarat>0);}))throw Error('Invalid stone');
       next.sort(function(a,b){return parseFloat(a.id.replace('#',''))-parseFloat(b.id.replace('#',''));});
