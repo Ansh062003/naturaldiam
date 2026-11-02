@@ -1,0 +1,25 @@
+name: Refresh gem video feed
+'on':
+  workflow_dispatch: {}
+  schedule:
+  - cron: 23 */6 * * *
+permissions:
+  contents: write
+concurrency:
+  group: gem-video-feed
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        filter: blob:none
+        sparse-checkout: |
+          .github
+          gems/api
+          gems/assets/videos.js
+        sparse-checkout-cone-mode: false
+    - name: Refresh feed
+      run: python3 .github/gem_feed.py
