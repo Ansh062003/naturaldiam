@@ -4,21 +4,8 @@
  "contact": "info@naturaldiam.it",
  "currency": "USD",
  "price_unit": "per_carat",
- "count": 16,
+ "count": 15,
  "stones": [
-  {
-   "stock": "#7440",
-   "type": "Ruby",
-   "carat": 3.52,
-   "shape": "Heart",
-   "origin": "Mozambique",
-   "treatment": "Heated",
-   "certificate": "AIGS",
-   "color": "Pigeon Blood",
-   "price_per_carat": 1950.0,
-   "video": "https://naturaldiam.it/gems/assets/videos/v1.mp4",
-   "poster": "https://naturaldiam.it/gems/assets/posters/v1.jpg"
-  },
   {
    "stock": "#7441",
    "type": "Ruby",

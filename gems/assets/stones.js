@@ -5,6 +5,7 @@ window.SITE = { supabaseUrl: "https://eigdjzygkqyslwpcaotp.supabase.co", supabas
 window.STONES = [
  {
   "id": "#1",
+  "status": "unavailable",
   "type": "Ruby",
   "heat": "Heat",
   "shape": "Heart",
