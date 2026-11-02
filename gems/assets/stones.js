@@ -382,6 +382,7 @@ window.STONES = [
  },
  {
   "id": "#42",
+  "status": "sold",
   "type": "Sapphire",
   "heat": "Heat",
   "shape": "Oval",
@@ -421,6 +422,7 @@ window.STONES = [
  },
  {
   "id": "#45",
+  "status": "sold",
   "type": "Sapphire",
   "heat": "Heat",
   "shape": "Oval",

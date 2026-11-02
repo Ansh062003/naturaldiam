@@ -15,7 +15,7 @@
     o.dimensions=String(o.dimensions||'').replace(/X/g,'x');return o}
   function init(){
     document.documentElement.setAttribute('data-source', window.__src || 'baked');
-    S=S.map(norm);
+    S=S.filter(function(s){return !/^(sold|hold|reserved)$/i.test(s.status||'')}).map(norm);
   var $ = function (id) { return document.getElementById(id); };
   if (!C.showPrices) { var _so = document.getElementById('sort'); if (_so) Array.prototype.slice.call(_so.options).forEach(function (o) { if (o.value === 'pa' || o.value === 'pd') _so.removeChild(o); }); }
   $('name').textContent = C.name; $('tag').textContent = C.tagline;
