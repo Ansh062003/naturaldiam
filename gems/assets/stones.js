@@ -14,7 +14,7 @@ window.STONES = [
   "dimensions": "12.05 x 9.39 x 3.65",
   "carat": 3.52,
   "pricePerCarat": 1950.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v1.mp4"
+  "video": "assets/videos/v1.mp4"
  },
  {
   "id": "#2",
@@ -27,7 +27,7 @@ window.STONES = [
   "dimensions": "9.82 x 7.36 x 4.12",
   "carat": 3.08,
   "pricePerCarat": 3200.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v2.mp4"
+  "video": "assets/videos/v2.mp4"
  },
  {
   "id": "#3",
@@ -40,7 +40,7 @@ window.STONES = [
   "dimensions": "11.60 x 9.12 x 4.15",
   "carat": 4.09,
   "pricePerCarat": 2600.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v3.mp4"
+  "video": "assets/videos/v3.mp4"
  },
  {
   "id": "#4",
@@ -53,7 +53,7 @@ window.STONES = [
   "dimensions": "11.39 x 7.71 x 3.59",
   "carat": 3.02,
   "pricePerCarat": 5100.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v4.mp4"
+  "video": "assets/videos/v4.mp4"
  },
  {
   "id": "#5",
@@ -79,7 +79,7 @@ window.STONES = [
   "dimensions": "10.42 x 7.32 x 5.77",
   "carat": 4.01,
   "pricePerCarat": 1150.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v6_1.mp4"
+  "video": "assets/videos/v6_1.mp4"
  },
  {
   "id": "#6.2",
@@ -92,7 +92,7 @@ window.STONES = [
   "dimensions": "10.22 x 7.09 x 4.53",
   "carat": 3.11,
   "pricePerCarat": 1150.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v6_2.mp4"
+  "video": "assets/videos/v6_2.mp4"
  },
  {
   "id": "#11",
@@ -170,7 +170,7 @@ window.STONES = [
   "dimensions": "10.84 x 8.37 x 4.97",
   "carat": 4.17,
   "pricePerCarat": 1200.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v17.mp4"
+  "video": "assets/videos/v17.mp4"
  },
  {
   "id": "#18",
@@ -313,7 +313,7 @@ window.STONES = [
   "dimensions": "11.00 X 8.53 X 3.61",
   "carat": 3.01,
   "pricePerCarat": 800.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v31.mp4"
+  "video": "assets/videos/v31.mp4"
  },
  {
   "id": "#32",
@@ -430,7 +430,7 @@ window.STONES = [
   "dimensions": "8.93 x 8.44 x 5.18",
   "carat": 3.59,
   "pricePerCarat": 350.0,
-  "video": "https://eigdjzygkqyslwpcaotp.supabase.co/storage/v1/object/public/videos/videos/v45.mp4"
+  "video": "assets/videos/v45.mp4"
  },
  {
   "id": "#47",
