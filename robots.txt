@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://naturaldiam.it/sitemap.xml
+
+Disallow: /gems/api/
