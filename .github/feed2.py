@@ -1,6 +1,35 @@
 import os,io,csv,re,json,math,hashlib,time,concurrent.futures,requests,collections
 from urllib.parse import urlparse
 from PIL import Image,ImageOps
+
+# --- repo media publishing: stage built webps into diamonds/media and push with GITHUB_TOKEN ---
+import subprocess
+REPO_DIR=os.environ.get('GITHUB_WORKSPACE','.')
+REPO_BASE='https://naturaldiam.it/diamonds/media/'
+staged_files=[];removed_files=[];pending_rows=[]
+def stage_media(subdir,stock,data):
+ p=os.path.join(REPO_DIR,'diamonds','media',subdir,stock+'.webp')
+ os.makedirs(os.path.dirname(p),exist_ok=True)
+ open(p,'wb').write(data);staged_files.append(p)
+def unstage_media(subdir,stock):removed_files.append('diamonds/media/'+subdir+'/'+stock+'.webp')
+def publish_media():
+ if not staged_files and not removed_files:return False
+ def git(*a):return subprocess.run(['git','-C',REPO_DIR]+list(a),capture_output=True,text=True)
+ try:
+  git('config','user.email','actions@users.noreply.github.com');git('config','user.name','github-actions')
+  for p in removed_files:git('rm','-q','--cached','--ignore-unmatch','--',p)
+  if staged_files:git('add','--sparse','--',*staged_files)
+  c=git('commit','-q','-m','Sync diamond media: %d added, %d removed'%(len(staged_files),len(removed_files)))
+  if c.returncode!=0:return False
+  for _ in range(5):
+   git('rebase','--abort')
+   git('fetch','-q','origin','main');r=git('rebase','-q','origin/main')
+   if r.returncode!=0:continue
+   p=git('push','-q','origin','HEAD:main')
+   if p.returncode==0:return True
+  return False
+ except Exception:return False
+# --- end repo media publishing ---
 ref='eigdjzygkqyslwpcaotp';control='https://api.supabase.com/v1/projects/'+ref
 admin=requests.Session();admin.headers['Authorization']='Bearer '+os.environ['SUPABASE_ACCESS_TOKEN']
 def api(path,method='POST',**kw):
@@ -87,6 +116,7 @@ old={x['ref']:x for x in sql('select * from public.diamond_extra_photo_cache')}
 sold=[k for k in old if k not in live]
 for i in range(0,len(sold),100):
  b=sold[i:i+100];store('object/diamond-extra-photos','DELETE',json={'prefixes':[k+'.webp' for k in b]});sql('delete from public.diamond_extra_photo_cache where ref in ('+','.join("'"+k+"'" for k in b)+')')
+ for k in b:unstage_media('extra',k)
 hosts=collections.Counter(urlparse(u).hostname for u in imgs.values() if re.search(r'\.(jpe?g|png|webp)(\?|$)',u or '',re.I))
 okhosts={h for h,n in hosts.items() if n>=100}
 attempts={x['ref']:x['attempted_at'] for x in sql('select * from public.diamond_extra_photo_attempts')}
@@ -108,11 +138,16 @@ def photo(item):
   im=ImageOps.exif_transpose(Image.open(io.BytesIO(data)));im.thumbnail((500,500));im=im.convert('RGB');o=io.BytesIO();im.save(o,'WEBP',quality=75)
   if o.tell()>65536:o=io.BytesIO();im.save(o,'WEBP',quality=55)
   if o.tell()>65536:return None
-  store('object/diamond-extra-photos/'+sid+'.webp','POST',data=o.getvalue(),headers={'Content-Type':'image/webp','x-upsert':'true','cache-control':'3600'})
-  sql("insert into public.diamond_extra_photo_cache(ref,photo,fingerprint) values('%s','%s','%s') on conflict(ref) do update set photo=excluded.photo,fingerprint=excluded.fingerprint,updated_at=now()"%(sid,base+'/storage/v1/object/public/diamond-extra-photos/'+sid+'.webp',fp(url)));return True
+  data=o.getvalue()
+  store('object/diamond-extra-photos/'+sid+'.webp','POST',data=data,headers={'Content-Type':'image/webp','x-upsert':'true','cache-control':'3600'})
+  stage_media('extra',sid,data);pending_rows.append((sid,fp(url)));return True
  except Exception:return None
  finally:sql("insert into public.diamond_extra_photo_attempts(ref) values('%s') on conflict(ref) do update set attempted_at=now()"%sid)
 done=0
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
  for s in pool.map(photo,work):done+=bool(s)
+pushed=publish_media()
+pbase=REPO_BASE+'extra/' if pushed else base+'/storage/v1/object/public/diamond-extra-photos/'
+for sid,fpr in pending_rows:
+ sql("insert into public.diamond_extra_photo_cache(ref,photo,fingerprint) values('%s','%s%s.webp','%s') on conflict(ref) do update set photo=excluded.photo,fingerprint=excluded.fingerprint,updated_at=now()"%(sid,pbase,sid,fpr))
 print('Photos',json.dumps({'pending':len(pend),'attempted':len(work),'cached':done,'total':sql('select count(*) as n from public.diamond_extra_photo_cache')[0]['n']}),flush=True)
