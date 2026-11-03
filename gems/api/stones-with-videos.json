@@ -1,10 +1,11 @@
 {
  "generated_at": "2026-11-03",
+ "note": "Snapshot of currently available stones with videos; not automatically updated.",
  "source": "https://naturaldiam.it/gems/",
  "contact": "info@naturaldiam.it",
  "currency": "USD",
  "price_unit": "per_carat",
- "count": 17,
+ "count": 18,
  "stones": [
   {
    "stock": "#7441",
@@ -167,7 +168,7 @@
    "type": "Ruby",
    "carat": 3.01,
    "shape": "Oval",
-   "origin": "",
+   "origin": null,
    "treatment": "No heat",
    "certificate": "GIT",
    "color": "RED",
@@ -213,6 +214,19 @@
    "price_per_carat": 1450.0,
    "video": "https://naturaldiam.it/gems/assets/videos/v44.mp4",
    "poster": "https://naturaldiam.it/gems/assets/posters/v44.jpg"
+  },
+  {
+   "stock": "#7491",
+   "type": "Ruby",
+   "carat": 10.66,
+   "shape": null,
+   "origin": "Mozambique",
+   "treatment": "Heated",
+   "certificate": "Belleraphon",
+   "color": null,
+   "price_per_carat": 1600.0,
+   "video": "https://naturaldiam.it/gems/assets/videos/v52.mp4",
+   "poster": "https://naturaldiam.it/gems/assets/posters/v52.jpg"
   },
   {
    "stock": "#7513",

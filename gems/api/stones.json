@@ -420,8 +420,8 @@
    "certificate": "Belleraphon",
    "color": null,
    "price_per_carat": 1600.0,
-   "video": null,
-   "poster": null
+   "video": "https://naturaldiam.it/gems/assets/videos/v52.mp4",
+   "poster": "https://naturaldiam.it/gems/assets/posters/v52.jpg"
   },
   {
    "stock": "#7513",
