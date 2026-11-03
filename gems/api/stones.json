@@ -368,8 +368,8 @@
    "certificate": "CDC",
    "color": "Intense red",
    "price_per_carat": 1450.0,
-   "video": null,
-   "poster": null
+   "video": "https://naturaldiam.it/gems/assets/videos/v44.mp4",
+   "poster": "https://naturaldiam.it/gems/assets/posters/v44.jpg"
   },
   {
    "stock": "#7486",
