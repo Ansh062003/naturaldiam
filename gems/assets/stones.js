@@ -97,6 +97,7 @@ window.STONES = [
  },
  {
   "id": "#11",
+  "status": "unavailable",
   "type": "Ruby",
   "heat": "Heat",
   "shape": "Oval",
@@ -110,6 +111,7 @@ window.STONES = [
  },
  {
   "id": "#12",
+  "status": "unavailable",
   "type": "Ruby",
   "heat": "Heat",
   "shape": "Oval",
