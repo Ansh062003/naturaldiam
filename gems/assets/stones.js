@@ -1,22 +1,7 @@
-
-// Stock data (loaded from his Stock list sheet, 5 Oct 2026, re-read 1:17pm). If sheetCsvUrl is set, the sheet replaces this.
+// Stock data (synced from the live inventory database, 16 Nov 2026; the stale 5 Oct sheet fallback was retired the same day - sheetCsvUrl is intentionally empty). If sheetCsvUrl is set, the sheet replaces this.
 // video: mp4 / YouTube / Vimeo / Google Drive link, or "".
-window.SITE = { supabaseUrl: "https://eigdjzygkqyslwpcaotp.supabase.co", supabaseKey: "sb_publishable_OjReDIKLqvD-vhuEW5vMQg_Gc3ligt6", showPrices: true, name: "Natural Diam", tagline: "Certified rubies and sapphires", currency: "USD", contact: "info@naturaldiam.it", sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQqsXwWdGAjfU6vE7A3Zn__RRmWZ2sxyOpYIG3n-pLhfrBR1-v3YBBoP7kEkKi11ew4yi3s2GWjkFqR/pub?output=csv" };
+window.SITE = { supabaseUrl: "https://eigdjzygkqyslwpcaotp.supabase.co", supabaseKey: "sb_publishable_OjReDIKLqvD-vhuEW5vMQg_Gc3ligt6", showPrices: true, name: "Natural Diam", tagline: "Certified rubies and sapphires", currency: "USD", contact: "info@naturaldiam.it", sheetCsvUrl: "" };
 window.STONES = [
- {
-  "id": "#1",
-  "status": "unavailable",
-  "type": "Ruby",
-  "heat": "Heat",
-  "shape": "Heart",
-  "origin": "Mozambique",
-  "certificate": "AIGS",
-  "color": "Pigeon Blood",
-  "dimensions": "12.05 x 9.39 x 3.65",
-  "carat": 3.52,
-  "pricePerCarat": 1950.0,
-  "video": "assets/videos/v1.mp4"
- },
  {
   "id": "#2",
   "type": "Ruby",
@@ -96,34 +81,6 @@ window.STONES = [
   "video": "assets/videos/v6_2.mp4"
  },
  {
-  "id": "#11",
-  "status": "unavailable",
-  "type": "Ruby",
-  "heat": "Heat",
-  "shape": "Oval",
-  "origin": "Mozambique",
-  "certificate": "GRS",
-  "color": "Red",
-  "dimensions": "",
-  "carat": 4.15,
-  "pricePerCarat": 1100.0,
-  "video": ""
- },
- {
-  "id": "#12",
-  "status": "unavailable",
-  "type": "Ruby",
-  "heat": "Heat",
-  "shape": "Oval",
-  "origin": "Mozambique",
-  "certificate": "GRS",
-  "color": "Red",
-  "dimensions": "",
-  "carat": 5.05,
-  "pricePerCarat": 875.0,
-  "video": ""
- },
- {
   "id": "#13.1",
   "type": "Ruby",
   "heat": "Heat",
@@ -160,7 +117,7 @@ window.STONES = [
   "dimensions": "",
   "carat": 3.0,
   "pricePerCarat": 3400.0,
-  "video": ""
+  "video": "assets/videos/v16.mp4"
  },
  {
   "id": "#17",
@@ -206,7 +163,7 @@ window.STONES = [
   "type": "Ruby",
   "heat": "No heat",
   "shape": "Cushion",
-  "origin": "N/A",
+  "origin": "",
   "certificate": "GIT",
   "color": "RED",
   "dimensions": "7.28 x 6.82 x 4.35",
@@ -219,7 +176,7 @@ window.STONES = [
   "type": "Ruby",
   "heat": "No heat",
   "shape": "Oval",
-  "origin": "N/A",
+  "origin": "",
   "certificate": "GIT",
   "color": "RED",
   "dimensions": "8.31 x 7.34 x 3.92",
@@ -238,7 +195,7 @@ window.STONES = [
   "dimensions": "9.16 x 10.55 x 3.39",
   "carat": 3.02,
   "pricePerCarat": 2100.0,
-  "video": ""
+  "video": "assets/videos/v25.mp4"
  },
  {
   "id": "#26",
@@ -251,7 +208,7 @@ window.STONES = [
   "dimensions": "10.47 x 9.03 x 6.56",
   "carat": 4.58,
   "pricePerCarat": 1200.0,
-  "video": ""
+  "video": "assets/videos/v26.mp4"
  },
  {
   "id": "#27",
@@ -264,14 +221,14 @@ window.STONES = [
   "dimensions": "9.51 x 6.78 x 6.51",
   "carat": 4.02,
   "pricePerCarat": 900.0,
-  "video": ""
+  "video": "assets/videos/v27.mp4"
  },
  {
   "id": "#28",
   "type": "Ruby",
   "heat": "No heat",
   "shape": "Cush",
-  "origin": "N/A",
+  "origin": "",
   "certificate": "GIT",
   "color": "Red",
   "dimensions": "9.24 x 7.15 x 3.08",
@@ -290,7 +247,7 @@ window.STONES = [
   "dimensions": "10.52 x 7.84 x 6.88",
   "carat": 4.61,
   "pricePerCarat": 1350.0,
-  "video": ""
+  "video": "assets/videos/v29.mp4"
  },
  {
   "id": "#30",
@@ -303,14 +260,14 @@ window.STONES = [
   "dimensions": "10.50 x 6.39 x 4.28",
   "carat": 3.08,
   "pricePerCarat": 2900.0,
-  "video": ""
+  "video": "assets/videos/v30.mp4"
  },
  {
   "id": "#31",
   "type": "Ruby",
   "heat": "No heat",
   "shape": "Oval",
-  "origin": "N/A",
+  "origin": "",
   "certificate": "GIT",
   "color": "RED",
   "dimensions": "11.00 X 8.53 X 3.61",
@@ -329,7 +286,7 @@ window.STONES = [
   "dimensions": "10.14 x 6.56 x 3.97",
   "carat": 2.52,
   "pricePerCarat": 1850.0,
-  "video": ""
+  "video": "assets/videos/v32.mp4"
  },
  {
   "id": "#34",
@@ -355,7 +312,7 @@ window.STONES = [
   "dimensions": "",
   "carat": 3.02,
   "pricePerCarat": 1290.0,
-  "video": ""
+  "video": "assets/videos/v38.mp4"
  },
  {
   "id": "#40",
@@ -384,25 +341,11 @@ window.STONES = [
   "video": ""
  },
  {
-  "id": "#42",
-  "status": "sold",
-  "type": "Sapphire",
-  "heat": "Heat",
-  "shape": "Oval",
-  "origin": "Madagascar",
-  "certificate": "CDC",
-  "color": "Blue",
-  "dimensions": "",
-  "carat": 4.2,
-  "pricePerCarat": 950.0,
-  "video": ""
- },
- {
   "id": "#43",
   "type": "Ruby",
   "heat": "No heat",
   "shape": "Cush",
-  "origin": "N/A",
+  "origin": "",
   "certificate": "GFCO",
   "color": "Reddish purple",
   "dimensions": "7.22 x 6.56 x 4.72",
@@ -421,21 +364,20 @@ window.STONES = [
   "dimensions": "",
   "carat": 6.05,
   "pricePerCarat": 1450.0,
-  "video": ""
+  "video": "assets/videos/v44.mp4"
  },
  {
-  "id": "#45",
-  "status": "sold",
-  "type": "Sapphire",
+  "id": "#46",
+  "type": "Ruby",
   "heat": "Heat",
-  "shape": "Oval",
-  "origin": "N/A",
+  "shape": "",
+  "origin": "Mozambique",
   "certificate": "GFCO",
-  "color": "Cornflower Blue",
-  "dimensions": "8.93 x 8.44 x 5.18",
-  "carat": 3.59,
-  "pricePerCarat": 350.0,
-  "video": "assets/videos/v45.mp4"
+  "color": "Pigeon's Blood red",
+  "dimensions": "",
+  "carat": 2.38,
+  "pricePerCarat": 650.0,
+  "video": "assets/videos/v46.mp4"
  },
  {
   "id": "#47",
@@ -475,5 +417,31 @@ window.STONES = [
   "carat": 27.38,
   "pricePerCarat": 695.0,
   "video": ""
+ },
+ {
+  "id": "#52",
+  "type": "Ruby",
+  "heat": "Heat",
+  "shape": "",
+  "origin": "Mozambique",
+  "certificate": "Belleraphon",
+  "color": "",
+  "dimensions": "",
+  "carat": 10.66,
+  "pricePerCarat": 1600.0,
+  "video": "assets/videos/v52.mp4"
+ },
+ {
+  "id": "#74",
+  "type": "Sapphire",
+  "heat": "Heat",
+  "shape": "",
+  "origin": "Sri Lanka",
+  "certificate": "Belleraphon",
+  "color": "Royal Blue",
+  "dimensions": "",
+  "carat": 2.9,
+  "pricePerCarat": 650.0,
+  "video": "assets/videos/v74.mp4"
  }
 ];
